@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <m-popover ref="popover" :ok-text="item ? $t('Edit') : $t('Submit')" @ok="_ok" @close="close">
     <template slot="content">
       <div class="create-token-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Expiration time') }}</template>
           <template slot="content">
             <el-date-picker
@@ -22,16 +22,16 @@ governing permissions and * limitations under the License. */
             >
             </el-date-picker>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="auth">
+        </ListBoxF>
+        <ListBoxF v-if="auth">
           <template slot="name"><strong>*</strong>{{ $t('User') }}</template>
           <template slot="content">
             <el-select v-model="userId" @change="_onChange" size="small">
               <el-option v-for="city in userIdList" :key="city.id" :value="city.id" :label="city.userName"> </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">Token</template>
           <template slot="content">
             <el-input
@@ -47,7 +47,7 @@ governing permissions and * limitations under the License. */
               $t('Generate token')
             }}</el-button>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popover>
@@ -59,7 +59,7 @@ import i18n from '@/module/i18n'
 import store from '@/store'
 import Permissions from '@/module/permissions'
 import mPopover from '@/components/popup/Popover'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-token',
@@ -165,7 +165,7 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopover, mListBoxF },
+  components: { mPopover, ListBoxF },
 }
 </script>
 

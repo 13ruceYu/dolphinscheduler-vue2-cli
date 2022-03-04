@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <m-popover ref="popover" :ok-text="item ? $t('Edit') : $t('Submit')" @ok="_ok" @close="close">
     <template slot="content">
       <div class="create-warning-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Group Name') }}</template>
           <template slot="content">
             <el-input
@@ -21,8 +21,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Alarm plugin instance') }}</template>
           <template slot="content">
             <el-select v-model="alertInstanceIds" size="small" style="width: 100%" multiple>
@@ -35,14 +35,14 @@ governing permissions and * limitations under the License. */
               </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Remarks') }}</template>
           <template slot="content">
             <el-input type="textarea" v-model="description" size="small" :placeholder="$t('Please enter description')">
             </el-input>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popover>
@@ -52,7 +52,7 @@ import _ from 'lodash'
 import i18n from '@/module/i18n'
 import store from '@/store'
 import mPopover from '@/components/popup/Popover'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-warning',
@@ -137,6 +137,6 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopover, mListBoxF },
+  components: { mPopover, ListBoxF },
 }
 </script>

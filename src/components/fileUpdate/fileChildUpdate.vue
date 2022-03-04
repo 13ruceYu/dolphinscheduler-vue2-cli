@@ -35,7 +35,7 @@ governing permissions and * limitations under the License. */
               <span>{{ $t('Drag area upload') }}</span>
             </p>
           </div>
-          <m-list-box-f>
+          <ListBoxF>
             <template slot="name"><strong>*</strong>{{ $t('File Name') }}</template>
             <template slot="content">
               <el-input
@@ -47,8 +47,8 @@ governing permissions and * limitations under the License. */
               >
               </el-input>
             </template>
-          </m-list-box-f>
-          <m-list-box-f>
+          </ListBoxF>
+          <ListBoxF>
             <template slot="name">{{ $t('Description') }}</template>
             <template slot="content">
               <el-input
@@ -60,8 +60,8 @@ governing permissions and * limitations under the License. */
               >
               </el-input>
             </template>
-          </m-list-box-f>
-          <m-list-box-f>
+          </ListBoxF>
+          <ListBoxF>
             <template slot="name"><strong>*</strong>{{ $t('Upload Files') }}</template>
             <template slot="content">
               <div class="file-update-box">
@@ -74,7 +74,7 @@ governing permissions and * limitations under the License. */
                 </div>
               </div>
             </template>
-          </m-list-box-f>
+          </ListBoxF>
         </div>
       </form>
     </template>
@@ -86,7 +86,7 @@ import i18n from '@/module/i18n'
 import store from '@/store'
 import localStore from '@/util/localStorage'
 import mPopup from '@/components/popup/popup'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 import mProgressBar from '@/components/progressBar/progressBar'
 
 export default {
@@ -231,7 +231,7 @@ export default {
       this.name = file.name
     })
   },
-  components: { mPopup, mListBoxF, mProgressBar },
+  components: { mPopup, ListBoxF, mProgressBar },
 }
 </script>
 

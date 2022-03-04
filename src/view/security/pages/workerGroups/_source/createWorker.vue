@@ -14,7 +14,7 @@ governing permissions and * limitations under the License. */
   >
     <template slot="content">
       <div class="create-worker-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Group Name') }}</template>
           <template slot="content">
             <el-input
@@ -26,8 +26,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>IP</template>
           <template slot="content">
             <el-input
@@ -42,7 +42,7 @@ governing permissions and * limitations under the License. */
               <span>{{ $t('Note: Multiple IP addresses have been comma separated') }}</span>
             </div>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popup>
@@ -51,7 +51,7 @@ governing permissions and * limitations under the License. */
 import i18n from '@/module/i18n'
 import store from '@/store'
 import mPopup from '@/components/popup/popup'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-warning',
@@ -134,7 +134,7 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopup, mListBoxF },
+  components: { mPopup, ListBoxF },
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">

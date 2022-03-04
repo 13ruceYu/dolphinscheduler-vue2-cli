@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <ListConstruction :title="$t('Create File')">
     <template slot="content">
       <div class="resource-create-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('File Name') }}</template>
           <template slot="content">
             <el-input
@@ -22,16 +22,16 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('File Format') }}</template>
           <template slot="content">
             <el-select v-model="suffix" size="small" style="width: 100px" @change="_onChange">
               <el-option v-for="city in fileTypeList" :key="city" :value="city" :label="city"> </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Description') }}</template>
           <template slot="content">
             <el-input
@@ -44,14 +44,14 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('File Content') }}</template>
           <template slot="content">
             <textarea id="code-create-mirror" name="code-create-mirror"></textarea>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">&nbsp;</template>
           <template slot="content">
             <div class="submit">
@@ -63,7 +63,7 @@ governing permissions and * limitations under the License. */
               </el-button>
             </div>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </ListConstruction>
@@ -75,7 +75,7 @@ import { mapActions } from 'vuex'
 import { filtTypeArr } from '../_source/common'
 import { handlerSuffix } from '../details/_source/utils'
 import codemirror from '../_source/codemirror'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 import localStore from '@/util/localStorage'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
 
@@ -175,7 +175,7 @@ export default {
     editor.off($('.code-create-mirror'), 'keypress', this.keypress)
   },
   computed: {},
-  components: { ListConstruction, mListBoxF },
+  components: { ListConstruction, ListBoxF },
 }
 </script>
 

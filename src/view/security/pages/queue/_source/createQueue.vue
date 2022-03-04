@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <m-popover ref="popover" :ok-text="item ? $t('Edit') : $t('Submit')" @ok="_ok" @close="close">
     <template slot="content">
       <div class="create-tenement-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Name') }}</template>
           <template slot="content">
             <el-input
@@ -21,8 +21,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Queue value') }}</template>
           <template slot="content">
             <el-input
@@ -34,7 +34,7 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popover>
@@ -44,7 +44,7 @@ import _ from 'lodash'
 import i18n from '@/module/i18n'
 import store from '@/store'
 import mPopover from '@/components/popup/Popover'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-tenement',
@@ -147,6 +147,6 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopover, mListBoxF },
+  components: { mPopover, ListBoxF },
 }
 </script>

@@ -2,7 +2,7 @@
   <ListConstruction :title="$t('Create folder')">
     <template slot="content">
       <div class="resource-create-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"> <strong>*</strong>{{ $t('Folder Name') }} </template>
           <template slot="content">
             <el-input
@@ -14,8 +14,8 @@
               :placeholder="$t('Please enter name')"
             />
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">
             {{ $t('Description') }}
           </template>
@@ -28,8 +28,8 @@
               :placeholder="$t('Please enter description')"
             />
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"> &nbsp; </template>
           <template slot="content">
             <div class="submit">
@@ -41,7 +41,7 @@
               </el-button>
             </div>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </ListConstruction>
@@ -50,12 +50,12 @@
 import i18n from '@/module/i18n'
 import { mapActions } from 'vuex'
 import { filtTypeArr } from '../_source/common'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
 
 export default {
   name: 'ResourceListCreateFILE',
-  components: { ListConstruction, mListBoxF },
+  components: { ListConstruction, ListBoxF },
   props: {},
   data() {
     return {

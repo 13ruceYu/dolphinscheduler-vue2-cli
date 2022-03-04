@@ -9,20 +9,20 @@ governing permissions and * limitations under the License. */
   <m-popup :ok-text="$t('Rename')" :nameText="$t('Rename')" @ok="_ok" @close="close" :asyn-loading="true">
     <template slot="content">
       <div class="resource-rename-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Name') }}</template>
           <template slot="content">
             <el-input type="input" v-model="name" maxlength="60" size="small" :placeholder="$t('Please enter name')">
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Description') }}</template>
           <template slot="content">
             <el-input type="textarea" v-model="description" size="small" :placeholder="$t('Please enter description')">
             </el-input>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popup>
@@ -31,7 +31,7 @@ governing permissions and * limitations under the License. */
 import i18n from '@/module/i18n'
 import store from '@/store'
 import mPopup from '@/components/popup/popup'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 export default {
   name: 'resource-udf-rename',
   data() {
@@ -102,6 +102,6 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopup, mListBoxF },
+  components: { mPopup, ListBoxF },
 }
 </script>

@@ -7,57 +7,57 @@ by applicable law or agreed to in writing, software * distributed under the Lice
 governing permissions and * limitations under the License. */
 <template>
   <div class="user-info-model">
-    <m-list-box-f>
+    <ListBoxF>
       <template slot="name">{{ $t('User Name') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.userName }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Email') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.email }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Phone') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.phone }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Permission') }}</template>
       <template slot="content">
         <span class="sp1">{{
           userInfo.userType === 'GENERAL_USER' ? `${$t('Ordinary users')}` : `${$t('Administrator')}`
         }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f v-ps="['GENERAL_USER']">
+    </ListBoxF>
+    <ListBoxF v-ps="['GENERAL_USER']">
       <template slot="name">{{ $t('Tenant') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.tenantCode }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f v-ps="['GENERAL_USER']">
+    </ListBoxF>
+    <ListBoxF v-ps="['GENERAL_USER']">
       <template slot="name">{{ $t('Queue') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.queueName }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Create Time') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.createTime | formatDate }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Update Time') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.updateTime | formatDate }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">&nbsp;</template>
       <template slot="content">
         <el-button type="primary" size="small" round @click="_edit()">{{ $t('Edit') }}</el-button>
@@ -70,12 +70,12 @@ governing permissions and * limitations under the License. */
           <m-create-user :item="item" @onUpdate="onUpdate" @close="close"></m-create-user>
         </el-dialog>
       </template>
-    </m-list-box-f>
+    </ListBoxF>
   </div>
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 import mCreateUser from '@/view/security/pages/users/_source/createUser'
 
 export default {
@@ -116,7 +116,7 @@ export default {
   computed: {
     ...mapState('user', ['userInfo']),
   },
-  components: { mListBoxF, mCreateUser },
+  components: { ListBoxF, mCreateUser },
 }
 </script>
 

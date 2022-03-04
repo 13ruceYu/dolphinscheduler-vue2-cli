@@ -21,13 +21,13 @@
             </el-input>
           </template>
         </ListBoxF>
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name">{{ $t('Description') }}</template>
           <template slot="content">
             <el-input v-model="description" :placeholder="$t('Please enter description')" size="small" type="textarea">
             </el-input>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </Popover>

@@ -16,7 +16,7 @@ governing permissions and * limitations under the License. */
   >
     <template slot="content">
       <div class="udf-create-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('type') }}</template>
           <template slot="content">
             <el-radio-group v-model="type" size="mini" style="vertical-align: sub">
@@ -24,8 +24,8 @@ governing permissions and * limitations under the License. */
               <!--<v-radio :label="'SPARK'">SPARK UDF</v-radio>-->
             </el-radio-group>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('UDF Function Name') }}</template>
           <template slot="content">
             <el-input
@@ -37,8 +37,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Package Name') }}</template>
           <template slot="content">
             <el-input
@@ -50,8 +50,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('UDF Resources') }}</template>
           <template slot="content">
             <treeselect
@@ -72,8 +72,8 @@ governing permissions and * limitations under the License. */
               $t('Upload Resources')
             }}</el-button>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="isUpdate">
+        </ListBoxF>
+        <ListBoxF v-if="isUpdate">
           <template slot="name"><strong>*</strong>{{ $t('UDF resources directory') }}</template>
           <template slot="content">
             <treeselect
@@ -90,14 +90,14 @@ governing permissions and * limitations under the License. */
               </div>
             </treeselect>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="isUpdate">
+        </ListBoxF>
+        <ListBoxF v-if="isUpdate">
           <template slot="name">&nbsp;</template>
           <template slot="content">
             <m-udf-update ref="assignment" @on-update-present="_onUpdatePresent" @on-update="_onUpdate"> </m-udf-update>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Instructions') }}</template>
           <template slot="content">
             <el-input
@@ -108,7 +108,7 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popup>
@@ -120,7 +120,7 @@ import store from '@/store'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import mPopup from '@/components/popup/popup'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 import mUdfUpdate from '@/components/fileUpdate/udfUpdate'
 
 export default {
@@ -343,7 +343,7 @@ export default {
     })
   },
   mounted() {},
-  components: { mPopup, mListBoxF, mUdfUpdate, Treeselect },
+  components: { mPopup, ListBoxF, mUdfUpdate, Treeselect },
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">

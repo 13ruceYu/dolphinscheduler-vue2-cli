@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <div class="datasource-popup-model">
     <div class="content-p">
       <div class="create-datasource-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Datasource') }}</template>
           <template slot="content" size="small">
             <el-select style="width: 100%" v-model="type">
@@ -17,8 +17,8 @@ governing permissions and * limitations under the License. */
               </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Datasource Name') }}</template>
           <template slot="content">
             <el-input
@@ -30,35 +30,35 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Description') }}</template>
           <template slot="content">
             <el-input type="textarea" v-model="note" size="small" :placeholder="$t('Please enter description')">
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('IP') }}</template>
           <template slot="content">
             <el-input type="input" v-model="host" maxlength="60" size="small" :placeholder="$t('Please enter IP')">
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Port') }}</template>
           <template slot="content">
             <el-input type="input" v-model="port" size="small" :placeholder="$t('Please enter port')"> </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f :class="{ hidden: showPrincipal }">
+        </ListBoxF>
+        <ListBoxF :class="{ hidden: showPrincipal }">
           <template slot="name"><strong>*</strong>Principal</template>
           <template slot="content">
             <el-input type="input" v-model="principal" size="small" :placeholder="$t('Please enter Principal')">
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('User Name') }}</template>
           <template slot="content">
             <el-input
@@ -70,15 +70,15 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Password') }}</template>
           <template slot="content">
             <el-input type="password" v-model="password" size="small" :placeholder="$t('Please enter your password')">
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"
             ><strong :class="{ hidden: showdDatabase }">*</strong>{{ $t('Database Name') }}</template
           >
@@ -92,8 +92,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="showConnectType">
+        </ListBoxF>
+        <ListBoxF v-if="showConnectType">
           <template slot="name"><strong>*</strong>{{ $t('Oracle Connect Type') }}</template>
           <template slot="content">
             <el-radio-group v-model="connectType" size="small" style="vertical-align: sub">
@@ -101,8 +101,8 @@ governing permissions and * limitations under the License. */
               <el-radio :label="'ORACLE_SID'">{{ $t('Oracle SID') }}</el-radio>
             </el-radio-group>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('jdbc connect parameters') }}</template>
           <template slot="content">
             <el-input
@@ -114,7 +114,7 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </div>
     <div class="bottom-p">
@@ -134,7 +134,7 @@ governing permissions and * limitations under the License. */
 import i18n from '@/module/i18n'
 import store from '@/store'
 import { isJson } from '@/util/util'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-datasource',
@@ -486,7 +486,7 @@ export default {
   },
 
   mounted() {},
-  components: { mListBoxF },
+  components: { ListBoxF },
 }
 </script>
 

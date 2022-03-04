@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <m-popover ref="popover" :ok-text="item ? $t('Edit') : $t('Submit')" @ok="_ok" @close="close">
     <template slot="content">
       <div class="create-user-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('User Name') }}</template>
           <template slot="content">
             <el-input
@@ -21,8 +21,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="router.history.current.name !== 'account'">
+        </ListBoxF>
+        <ListBoxF v-if="router.history.current.name !== 'account'">
           <template slot="name"><strong>*</strong>{{ $t('Password') }}</template>
           <template slot="content">
             <el-input
@@ -33,16 +33,16 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="isADMIN">
+        </ListBoxF>
+        <ListBoxF v-if="isADMIN">
           <template slot="name"><strong>*</strong>{{ $t('Tenant') }}</template>
           <template slot="content">
             <el-select v-model="tenantId" style="width: 100%" size="small">
               <el-option v-for="city in tenantList" :key="city.id" :value="city.id" :label="city.code"> </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
-        <m-list-box-f v-if="isADMIN">
+        </ListBoxF>
+        <ListBoxF v-if="isADMIN">
           <template slot="name">{{ $t('Queue') }}</template>
           <template slot="content">
             <el-select v-model="queueName" style="width: 100%" size="small">
@@ -65,21 +65,21 @@ governing permissions and * limitations under the License. */
               <el-option v-for="city in queueList" :key="city.id" :value="city.id" :label="city.code"> </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Email') }}</template>
           <template slot="content">
             <el-input type="input" v-model="email" size="small" :placeholder="$t('Please enter email')"> </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Phone') }}</template>
           <template slot="content">
             <el-input type="input" v-model="phone" size="small" :placeholder="$t('Please enter phone number')">
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f style="line-height: 38px">
+        </ListBoxF>
+        <ListBoxF style="line-height: 38px">
           <template slot="name">{{ $t('State') }}</template>
           <template slot="content">
             <el-radio-group v-model="userState" size="small">
@@ -87,7 +87,7 @@ governing permissions and * limitations under the License. */
               <el-radio :label="'0'">{{ $t('Disable') }}</el-radio>
             </el-radio-group>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popover>
@@ -98,7 +98,7 @@ import i18n from '@/module/i18n'
 import store from '@/store'
 import router from '@/router'
 import mPopover from '@/components/popup/Popover'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-user',
@@ -323,6 +323,6 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopover, mListBoxF },
+  components: { mPopover, ListBoxF },
 }
 </script>

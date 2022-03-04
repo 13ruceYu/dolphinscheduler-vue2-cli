@@ -9,14 +9,14 @@ governing permissions and * limitations under the License. */
   <m-popup ref="popup" :ok-text="$t('Confirm')" :nameText="$t('Related items')" @ok="_ok">
     <template slot="content">
       <div class="create-tenement-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Project Name') }}</template>
           <template slot="content">
             <el-select v-model="itemId" size="small">
               <el-option v-for="item in itemList" :key="item.id" :value="item.id" :label="item.name"> </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </m-popup>
@@ -25,7 +25,7 @@ governing permissions and * limitations under the License. */
 import i18n from '@/module/i18n'
 import store from '@/store'
 import mPopup from '@/components/popup/popup'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-tenement',
@@ -66,6 +66,6 @@ export default {
     })
   },
   mounted() {},
-  components: { mPopup, mListBoxF },
+  components: { mPopup, ListBoxF },
 }
 </script>

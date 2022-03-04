@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <m-popover ref="popover" :ok-text="item ? $t('Edit') : $t('Submit')" @ok="_ok" @close="close">
     <template slot="content">
       <div class="create-warning-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Alarm instance name') }}</template>
           <template slot="content">
             <el-input
@@ -21,8 +21,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Select plugin') }}</template>
           <template slot="content">
             <el-select
@@ -41,7 +41,7 @@ governing permissions and * limitations under the License. */
               </el-option>
             </el-select>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
         <div class="alertForm">
           <template>
             <form-create v-model="$f" :rule="rule" :option="{ submitBtn: false }" size="mini"></form-create>
@@ -55,7 +55,7 @@ governing permissions and * limitations under the License. */
 import i18n from '@/module/i18n'
 import store from '@/store'
 import mPopover from '@/components/popup/Popover'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'create-warning',
@@ -167,7 +167,7 @@ export default {
     }
   },
   mounted() {},
-  components: { mPopover, mListBoxF },
+  components: { mPopover, ListBoxF },
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">

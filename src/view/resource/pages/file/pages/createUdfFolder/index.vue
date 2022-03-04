@@ -9,7 +9,7 @@ governing permissions and * limitations under the License. */
   <ListConstruction :title="$t('Create folder')">
     <template slot="content">
       <div class="resource-create-model">
-        <m-list-box-f>
+        <ListBoxF>
           <template slot="name"><strong>*</strong>{{ $t('Folder Name') }}</template>
           <template slot="content">
             <el-input
@@ -22,8 +22,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">{{ $t('Description') }}</template>
           <template slot="content">
             <el-input
@@ -35,8 +35,8 @@ governing permissions and * limitations under the License. */
             >
             </el-input>
           </template>
-        </m-list-box-f>
-        <m-list-box-f>
+        </ListBoxF>
+        <ListBoxF>
           <template slot="name">&nbsp;</template>
           <template slot="content">
             <div class="submit">
@@ -48,7 +48,7 @@ governing permissions and * limitations under the License. */
               </el-button>
             </div>
           </template>
-        </m-list-box-f>
+        </ListBoxF>
       </div>
     </template>
   </ListConstruction>
@@ -57,7 +57,7 @@ governing permissions and * limitations under the License. */
 import i18n from '@/module/i18n'
 import { mapActions } from 'vuex'
 import { filtTypeArr } from '../_source/common'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
 
 export default {
@@ -110,7 +110,7 @@ export default {
   mounted() {},
   destroyed() {},
   computed: {},
-  components: { ListConstruction, mListBoxF },
+  components: { ListConstruction, ListBoxF },
 }
 </script>
 

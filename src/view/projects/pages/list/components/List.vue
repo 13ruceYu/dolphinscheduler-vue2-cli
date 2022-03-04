@@ -104,7 +104,7 @@ export default {
      * @param item Current record
      * @param i index
      */
-    _delete(item, i) {
+    _delete(item) {
       this.deleteProjects({
         projectId: item.id,
       })
@@ -121,7 +121,7 @@ export default {
      * @param item Current record
      */
     _edit(item) {
-      findComponentDownward(this.$root, 'projects-list')._create(item)
+      findComponentDownward(this.$root, 'ProjectsList')._create(item)
     },
   },
 }

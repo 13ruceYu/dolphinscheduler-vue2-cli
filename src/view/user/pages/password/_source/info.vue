@@ -7,13 +7,13 @@ by applicable law or agreed to in writing, software * distributed under the Lice
 governing permissions and * limitations under the License. */
 <template>
   <div class="user-info-model password-model">
-    <m-list-box-f>
+    <ListBoxF>
       <template slot="name">{{ $t('User Name') }}</template>
       <template slot="content">
         <span class="sp1">{{ userInfo.userName }}</span>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Password') }}</template>
       <template slot="content">
         <el-input
@@ -25,8 +25,8 @@ governing permissions and * limitations under the License. */
         >
         </el-input>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">{{ $t('Confirm Password') }}</template>
       <template slot="content">
         <el-input
@@ -38,21 +38,21 @@ governing permissions and * limitations under the License. */
         >
         </el-input>
       </template>
-    </m-list-box-f>
-    <m-list-box-f>
+    </ListBoxF>
+    <ListBoxF>
       <template slot="name">&nbsp;</template>
       <template slot="content">
         <el-button type="primary" round size="small" @click="_edit()" :loading="spinnerLoading">{{
           spinnerLoading ? 'Loading...' : $t('Edit')
         }}</el-button>
       </template>
-    </m-list-box-f>
+    </ListBoxF>
   </div>
 </template>
 <script>
 import i18n from '@/module/i18n'
 import { mapState, mapActions } from 'vuex'
-import mListBoxF from '@/components/listBoxF/ListBoxF'
+import ListBoxF from '@/components/listBoxF/ListBoxF'
 
 export default {
   name: 'password-info',
@@ -128,7 +128,7 @@ export default {
   computed: {
     ...mapState('user', ['userInfo']),
   },
-  components: { mListBoxF },
+  components: { ListBoxF },
 }
 </script>
 
