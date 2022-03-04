@@ -356,6 +356,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import { mapActions } from 'vuex'
 import mLog from './log'
@@ -756,7 +757,7 @@ export default {
     /**
      * Watch the item change, cache the value it changes
      **/
-    _item(val) {
+    _item() {
       // this._cacheItem()
     },
   },

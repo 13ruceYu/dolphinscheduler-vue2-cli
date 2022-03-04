@@ -49,6 +49,7 @@ governing permissions and * limitations under the License. */
   </ListConstruction>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import { mapActions } from 'vuex'
 import mNoType from './_source/noType'

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import $ from 'jquery'
 import _ from 'lodash'
 import canvg from 'canvg'
 import { tasksAll } from './util'
@@ -29,7 +29,7 @@ const DownChart = function () {
  * Get interception location information
  */
 DownChart.prototype.maxVal = function () {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     // All nodes
     const tasksAllList = tasksAll()
     const dom = $('.dag-container')

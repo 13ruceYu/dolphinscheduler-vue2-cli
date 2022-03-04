@@ -1,19 +1,4 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import $ from 'jquery'
 import 'jquery-ui/ui/widgets/draggable'
 import 'jquery-ui/ui/widgets/droppable'
 import 'jquery-ui/ui/widgets/resizable'
@@ -136,7 +121,7 @@ JSP.prototype.draggable = function () {
       scope: 'plant',
       helper: 'clone',
       containment: $('.dag-model'),
-      stop: function (e, ui) {},
+      stop: function () {},
       drag: function () {
         $('body').find('.tooltip.fade.top.in').remove()
       },
@@ -317,26 +302,26 @@ JSP.prototype.tasksContextmenu = function (event) {
       $('#startRunning').on('click', () => {
         const name = store.state.dag.name
         const id = router.history.current.params.id
-        store.dispatch('dag/getStartCheck', { processDefinitionId: id }).then((res) => {
+        store.dispatch('dag/getStartCheck', { processDefinitionId: id }).then(() => {
           this.dag.startRunning({ id: id, name: name }, $name, 'contextmenu')
         })
       })
     }
     if (!isTwo) {
       // edit node
-      $('#editNodes').click((ev) => {
+      $('#editNodes').click(() => {
         findComponentDownward(this.dag.$root, 'dag-chart')._createNodes({
           id: $id,
           type: $(`#${$id}`).attr('data-tasks-type'),
         })
       })
       // delete node
-      $('#removeNodes').click((ev) => {
+      $('#removeNodes').click(() => {
         this.removeNodes($id)
       })
 
       // copy node
-      $('#copyNodes').click((res) => {
+      $('#copyNodes').click(() => {
         this.copyNodes($id)
       })
     }
@@ -605,7 +590,7 @@ JSP.prototype.handleEventScreen = function ({ item, is }) {
  * @param connects
  */
 JSP.prototype.saveStore = function () {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const connects = []
     const locations = {}
     const tasks = []

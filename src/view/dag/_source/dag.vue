@@ -199,6 +199,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import Dag from './dag'
 import mUdp from './udp/udp'
@@ -338,7 +339,7 @@ export default {
       if (this.tasks.length) {
         Dag.backfill(true)
         if (this.type === 'instance') {
-          this._getTaskState(false).then((res) => {})
+          this._getTaskState(false).then(() => {})
         }
       } else {
         Dag.create()
@@ -350,10 +351,10 @@ export default {
         Dag.backfill(args)
         // Process instances can view status
         if (this.type === 'instance') {
-          this._getTaskState(false).then((res) => {})
+          this._getTaskState(false).then(() => {})
           // Round robin acquisition status
           this.setIntervalP = setInterval(() => {
-            this._getTaskState(true).then((res) => {})
+            this._getTaskState(true).then(() => {})
           }, 90000)
         }
       } else {
@@ -365,12 +366,12 @@ export default {
      */
     _copyName() {
       let clipboard = new Clipboard('.copy-name')
-      clipboard.on('success', (e) => {
+      clipboard.on('success', () => {
         this.$message.success(`${i18n.$t('Copy success')}`)
         // Free memory
         clipboard.destroy()
       })
-      clipboard.on('error', (e) => {
+      clipboard.on('error', () => {
         // Copy is not supported
         this.$message.warning(`${i18n.$t('The browser does not support automatic copying')}`)
         // Free memory
@@ -382,7 +383,7 @@ export default {
      * @param isReset Whether to manually refresh
      */
     _getTaskState(isReset) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.getTaskState(this.urlParam.id).then((res) => {
           let data = res.list
           let state = res.processInstanceState
@@ -640,7 +641,7 @@ export default {
      */
     _refresh() {
       this.isRefresh = true
-      this._getTaskState(false).then((res) => {
+      this._getTaskState(false).then(() => {
         setTimeout(() => {
           this.isRefresh = false
           this.$message.success(`${i18n.$t('Refresh status succeeded')}`)
@@ -660,11 +661,11 @@ export default {
     _toggleParam() {
       findComponentDownward(this.$root, 'starting-params-dag-index')._toggleParam()
     },
-    addLineInfo({ item, fromThis }) {
+    addLineInfo({ item }) {
       this.addConnects(item)
       this.lineDrawer = false
     },
-    cancel({ fromThis }) {
+    cancel() {
       this.lineDrawer = false
     },
 
@@ -689,16 +690,16 @@ export default {
       })
     },
 
-    addTaskInfo({ item, fromThis }) {
+    addTaskInfo({ item }) {
       this.addTasks(item)
       this.nodeDrawer = false
     },
 
-    cacheTaskInfo({ item, fromThis }) {
+    cacheTaskInfo({ item }) {
       this.cacheTasks(item)
     },
 
-    close({ item, flag, fromThis }) {
+    close({ item, flag }) {
       this.addTasks(item)
       // Edit status does not allow deletion of nodes
       if (flag) {
@@ -706,7 +707,7 @@ export default {
       }
       this.nodeDrawer = false
     },
-    onSubProcess({ subProcessId, fromThis }) {
+    onSubProcess({ subProcessId }) {
       this._subProcessHandle(subProcessId)
     },
 
@@ -767,14 +768,14 @@ export default {
      * @param processDefinitionId the process definition id
      * @param fromThis fromThis
      */
-    mVersionSwitchProcessDefinitionVersion({ version, processDefinitionId, fromThis }) {
+    mVersionSwitchProcessDefinitionVersion({ version, processDefinitionId }) {
       this.$store.state.dag.isSwitchVersion = true
       this.switchProcessDefinitionVersion({
         version: version,
         processDefinitionId: processDefinitionId,
       })
-        .then((res) => {
-          this.$message.success($t('Switch Version Successfully'))
+        .then(() => {
+          this.$message.success(this.$t('Switch Version Successfully'))
           this.$router.push({
             path: `/projects/definition/list/${processDefinitionId}?_t=${new Date().getTime()}`,
           })
@@ -793,7 +794,7 @@ export default {
      * @param processDefinitionId the process definition id of page version
      * @param fromThis fromThis
      */
-    mVersionGetProcessDefinitionVersionsPage({ pageNo, pageSize, processDefinitionId, fromThis }) {
+    mVersionGetProcessDefinitionVersionsPage({ pageNo, pageSize, processDefinitionId }) {
       this.getProcessDefinitionVersionsPage({
         pageNo: pageNo,
         pageSize: pageSize,
@@ -838,7 +839,7 @@ export default {
     /**
      * query the process definition pagination version
      */
-    _version(item) {
+    _version() {
       this.getProcessDefinitionVersionsPage({
         pageNo: 1,
         pageSize: 10,
@@ -870,7 +871,7 @@ export default {
   watch: {
     tasks: {
       deep: true,
-      handler(o) {
+      handler() {
         // Edit state does not allow deletion of node a...
         this.setIsEditDag(true)
       },

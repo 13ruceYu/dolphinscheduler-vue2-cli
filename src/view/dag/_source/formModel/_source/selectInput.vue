@@ -27,6 +27,7 @@ governing permissions and * limitations under the License. */
   </el-select>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import i18n from '@/module/i18n'
 import disabledState from '@/module/mixin/disabledState'

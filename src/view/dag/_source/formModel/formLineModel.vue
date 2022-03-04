@@ -44,6 +44,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import disabledState from '@/module/mixin/disabledState'
 
 export default {

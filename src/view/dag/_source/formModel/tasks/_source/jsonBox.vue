@@ -17,6 +17,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import mListBox from './listBox'
 import disabledState from '@/module/mixin/disabledState'

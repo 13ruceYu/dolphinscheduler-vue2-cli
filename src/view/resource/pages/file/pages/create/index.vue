@@ -68,6 +68,7 @@ governing permissions and * limitations under the License. */
   </ListConstruction>
 </template>
 <script>
+import $ from 'jquery'
 import i18n from '@/module/i18n'
 import { mapActions } from 'vuex'
 import { filtTypeArr } from '../_source/common'

@@ -51,6 +51,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import i18n from '@/module/i18n'
 import mListBox from './_source/listBox'
@@ -235,8 +236,8 @@ export default {
         let noResources = [
           {
             id: -1,
-            name: $t('Unauthorized or deleted resources'),
-            fullName: '/' + $t('Unauthorized or deleted resources'),
+            name: this.$t('Unauthorized or deleted resources'),
+            fullName: '/' + this.$t('Unauthorized or deleted resources'),
             children: [],
           },
         ]
@@ -322,7 +323,7 @@ export default {
                 this.resourceList.push(res.id)
                 this.dataProcess(backResource)
               })
-              .catch((e) => {
+              .catch(() => {
                 this.resourceList.push(v.res)
                 this.dataProcess(backResource)
               })

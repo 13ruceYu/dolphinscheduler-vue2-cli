@@ -135,6 +135,7 @@
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import i18n from '@/module/i18n'
 import mListBox from './_source/listBox'
@@ -470,7 +471,7 @@ export default {
   },
   watch: {
     // Watch the cacheParams
-    cacheParams(val) {
+    cacheParams() {
       this._cacheParams()
     },
   },

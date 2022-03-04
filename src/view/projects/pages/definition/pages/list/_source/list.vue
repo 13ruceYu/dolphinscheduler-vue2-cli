@@ -250,6 +250,7 @@
 </template>
 <script>
 import _ from 'lodash'
+import $ from 'jquery'
 import mStart from './start'
 import mTiming from './timing'
 import mRelatedItems from './relatedItems'
@@ -303,7 +304,7 @@ export default {
     ]),
     ...mapActions('security', ['getWorkerGroupsAll']),
 
-    selectable(row, index) {
+    selectable(row) {
       if (row.releaseState === 'ONLINE') {
         return false
       } else {
@@ -322,7 +323,7 @@ export default {
     _start(item) {
       this.getWorkerGroupsAll()
       this.getStartCheck({ processDefinitionId: item.id })
-        .then((res) => {
+        .then(() => {
           this.startData = item
           this.startDialog = true
         })
@@ -456,13 +457,13 @@ export default {
      * @param processDefinitionId the process definition id
      * @param fromThis fromThis
      */
-    mVersionSwitchProcessDefinitionVersion({ version, processDefinitionId, fromThis }) {
+    mVersionSwitchProcessDefinitionVersion({ version, processDefinitionId }) {
       this.switchProcessDefinitionVersion({
         version: version,
         processDefinitionId: processDefinitionId,
       })
-        .then((res) => {
-          this.$message.success($t('Switch Version Successfully'))
+        .then(() => {
+          this.$message.success(this.$t('Switch Version Successfully'))
           this.$router.push({
             path: `/projects/definition/list/${processDefinitionId}`,
           })
@@ -479,7 +480,7 @@ export default {
      * @param processDefinitionId the process definition id of page version
      * @param fromThis fromThis
      */
-    mVersionGetProcessDefinitionVersionsPage({ pageNo, pageSize, processDefinitionId, fromThis }) {
+    mVersionGetProcessDefinitionVersionsPage({ pageNo, pageSize, processDefinitionId }) {
       this.getProcessDefinitionVersionsPage({
         pageNo: pageNo,
         pageSize: pageSize,
@@ -553,7 +554,7 @@ export default {
         processDefinitionIds: this.strSelectIds,
         fileName: 'process_' + new Date().getTime(),
       })
-        .then((res) => {
+        .then(() => {
           this._onUpdate()
           this.checkAll = false
           this.strSelectIds = ''

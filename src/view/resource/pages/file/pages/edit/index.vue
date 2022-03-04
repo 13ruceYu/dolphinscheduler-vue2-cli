@@ -41,6 +41,7 @@ governing permissions and * limitations under the License. */
 <script>
 import i18n from '@/module/i18n'
 import _ from 'lodash'
+import $ from 'jquery'
 import { mapActions } from 'vuex'
 import { filtTypeArr } from '../_source/common'
 import mNoType from '../details/_source/noType'

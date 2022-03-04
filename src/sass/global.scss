@@ -1,0 +1,131 @@
+.main-layout-box {
+  padding-left: 200px;
+  &.no {
+    padding-left: 0;
+  }
+}
+
+.page-box {
+  text-align: right;
+  padding: 20px;
+  .ans-page {
+    display: inline-block;
+  }
+}
+
+.clearfix,
+.outer {
+  zoom: 1;
+}
+.clearfix:after,
+.outer:after {
+  clear: both;
+  content: ' ';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+body {
+  font-family: PingFangSC-Light, Helvetica Neue, Helvetica, Microsoft Yahei, Arial, Hiragino Sans GB, tahoma, SimSun,
+    sans-serif;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: #0097e0;
+}
+
+article,
+aside,
+blockquote,
+body,
+button,
+code,
+dd,
+details,
+div,
+dl,
+dt,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+hr,
+input,
+legend,
+li,
+menu,
+nav,
+ol,
+p,
+pre,
+section,
+td,
+textarea,
+th,
+ul {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+p {
+  font-style: normal;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+ol,
+ul {
+  list-style: none;
+}
+img {
+  border: 0;
+}
+input::-ms-clear,
+input::-ms-reveal {
+  display: none;
+}
+a,
+body {
+  color: #333;
+}
+
+body::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+body::-webkit-scrollbar-track {
+  background: hsla(0, 0%, 100%, 0);
+  border-radius: 2x;
+  margin: 4px 0;
+}
+body::-webkit-scrollbar-thumb {
+  background: hsla(0, 0%, 100%, 0);
+  border-radius: 2px;
+  -webkit-transition: background 0.2s ease-in-out;
+  transition: background 0.2s ease-in-out;
+}

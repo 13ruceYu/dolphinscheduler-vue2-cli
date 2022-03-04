@@ -100,6 +100,7 @@ governing permissions and * limitations under the License. */
 </template>
 
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import { cycleList, dateValueList } from './commcon'
 import disabledState from '@/module/mixin/disabledState'
@@ -155,7 +156,7 @@ export default {
     /**
      * remove task
      */
-    _remove(i) {
+    _remove() {
       // this.dependTaskList[this.index].dependItemList.splice(i, 1)
       this._removeTip()
       if (!this.dependItemList.length || this.dependItemList.length === 0) {
@@ -165,7 +166,7 @@ export default {
       }
     },
     _getProjectList() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.projectList = _.map(_.cloneDeep(this.store.state.dag.projectListS), (v) => {
           return {
             value: v.id,
@@ -179,7 +180,7 @@ export default {
      * get processlist
      */
     _getProcessList() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         let definitionList = _.map(_.cloneDeep(this.store.state.dag.processListS), (v) => {
           return {
             value: v.id,
@@ -190,7 +191,7 @@ export default {
       })
     },
     _getProcessByProjectId(id) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.store.dispatch('dag/getProcessByProjectId', { projectId: id }).then((res) => {
           let definitionList = _.map(_.cloneDeep(res), (v) => {
             return {
@@ -206,7 +207,7 @@ export default {
      * get dependItemList
      */
     _getDependItemList(ids, is = true) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         if (is) {
           this.store.dispatch('dag/getProcessTasksList', { processDefinitionId: ids }).then((res) => {
             resolve(['ALL'].concat(_.map(res, (v) => v.name)))

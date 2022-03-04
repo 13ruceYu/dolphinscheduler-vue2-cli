@@ -182,6 +182,7 @@
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import cookies from 'js-cookie'
 import { mapState, mapActions } from 'vuex'
@@ -391,7 +392,7 @@ export default {
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" scoped>
 .nav-model {
   height: 60px;
   background: #2d303a;

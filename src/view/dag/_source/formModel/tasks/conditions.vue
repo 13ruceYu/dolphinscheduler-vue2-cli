@@ -56,6 +56,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import mListBox from './_source/listBox'
 import mNodeStatus from './_source/nodeStatus'
@@ -103,7 +104,7 @@ export default {
     _setGlobalRelation() {
       this.relation = this.relation === 'AND' ? 'OR' : 'AND'
     },
-    getDependTaskList(i) {
+    getDependTaskList() {
       // console.log('getDependTaskList',i)
     },
     _setRelation(i) {
@@ -123,7 +124,7 @@ export default {
     },
   },
   watch: {
-    dependTaskList(e) {
+    dependTaskList() {
       setTimeout(() => {
         this.isLoading = false
       }, 600)

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import $ from 'jquery'
 import * as d3 from 'd3'
 import { rtInstancesTooltip, rtCountMethod } from './util'
 import { tasksType, tasksState } from '@/view/dag/_source/config'
@@ -51,7 +51,7 @@ const Tree = function () {
  * init
  */
 Tree.prototype.init = function ({ data, limit, selfTree }) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     this.selfTree = selfTree
     this.config.taskNum = limit
     this.duration = 400
@@ -146,7 +146,7 @@ Tree.prototype.treeToggles = function (clicked_d) {
  * update tree
  */
 Tree.prototype.treeUpdate = function (source) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const tasks = this.tree.nodes(this.root)
     const height = Math.max(
       500,
@@ -202,7 +202,7 @@ Tree.prototype.treeUpdate = function (source) {
     nodeEnter
       .append('g')
       .attr('class', 'stateboxes')
-      .attr('transform', (d, i) => 'translate(' + (this.config.nodesMax * 60 - d.y) + ',0)')
+      .attr('transform', (d) => 'translate(' + (this.config.nodesMax * 60 - d.y) + ',0)')
       .selectAll('rect')
       .data((d) => d.instances)
       .enter()
@@ -251,7 +251,7 @@ Tree.prototype.treeUpdate = function (source) {
       .exit()
       .transition()
       .duration(this.duration)
-      .attr('transform', (d) => 'translate(' + source.y + ',' + source.x + ')')
+      .attr('transform', () => 'translate(' + source.y + ',' + source.x + ')')
       .style('opacity', 1e-6)
       .remove()
 
@@ -263,7 +263,7 @@ Tree.prototype.treeUpdate = function (source) {
       .enter()
       .insert('path', 'g')
       .attr('class', 'link')
-      .attr('d', (d) => {
+      .attr('d', () => {
         const o = { x: source.x0, y: source.y0 }
         return this.diagonal({ source: o, target: o })
       })
@@ -279,7 +279,7 @@ Tree.prototype.treeUpdate = function (source) {
       .exit()
       .transition()
       .duration(this.duration)
-      .attr('d', (d) => {
+      .attr('d', () => {
         const o = { x: source.x, y: source.y }
         return this.diagonal({ source: o, target: o })
       })

@@ -102,6 +102,7 @@ governing permissions and * limitations under the License. */
   </div>
 </template>
 <script>
+import $ from 'jquery'
 import _ from 'lodash'
 import i18n from '@/module/i18n'
 import mUdfs from './_source/udfs'
@@ -328,7 +329,7 @@ export default {
       }
     },
     // Watch the cacheParams
-    cacheParams(val) {
+    cacheParams() {
       this._cacheParams()
     },
   },
