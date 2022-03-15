@@ -4,62 +4,13 @@
       <a href="javascript:"></a>
     </router-link>
     <div class="nav-box">
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/home' }" tag="a" active-class="active">
-            <span><em class="ansfont ri-home-4-line"></em>{{ $t('Home') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/projects' }" tag="a" active-class="active">
-            <span><em class="ansiconfont el-icon-tickets"></em>{{ $t('Project Manage') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/dataQuality' }" tag="a" active-class="active">
-            <span><em class="ansiconfont el-icon-document-checked"></em>{{ $t('DataQuality') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/resource' }" tag="a" active-class="active">
-            <span><em class="ansiconfont el-icon-folder"></em>{{ $t('Resources manage') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/dataSource' }" tag="a" active-class="active">
-            <span><em class="ansfont ri-database-2-line"></em>{{ $t('Datasource manage') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/monitor' }" tag="a" active-class="active">
-            <span><em class="ansiconfont el-icon-monitor"></em>{{ $t('Monitor') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
-      <div class="clearfix list">
-        <div class="nav-links">
-          <router-link :to="{ path: '/security' }" tag="a" active-class="active" v-ps="['ADMIN_USER']">
-            <span><em class="ansfont ri-shield-check-line"></em>{{ $t('Security') }}</span
-            ><strong></strong>
-          </router-link>
-        </div>
-      </div>
+      <NavItem path="/home" iconClass="ansfont ri-home-4-line" title="Home"></NavItem>
+      <NavItem path="/projects" iconClass="ansiconfont el-icon-tickets" title="Project Manage"></NavItem>
+      <NavItem path="/dataQuality" iconClass="ansiconfont el-icon-document-checked" title="DataQuality"></NavItem>
+      <NavItem path="/resource" iconClass="ansiconfont el-icon-folder" title="Resources manage"></NavItem>
+      <NavItem path="/dataSource" iconClass="ansfont ri-database-2-line" title="Datasource manage"></NavItem>
+      <NavItem path="/monitor" iconClass="ansiconfont el-icon-monitor" title="Monitor"></NavItem>
+      <NavItem path="/security" iconClass="ansfont ri-shield-check-line" title="Security"></NavItem>
     </div>
     <div class="right">
       <span class="lang">
@@ -88,6 +39,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
     <div class="file-update-model" @click="_toggleArchive" v-if="isUpdate">
       <div class="icon-cloud">
         <em class="ans el-icon-upload"></em>
@@ -95,47 +47,6 @@
       <div class="progress-box">
         <m-progress-bar :value="progress" text-placement="bottom"></m-progress-bar>
       </div>
-    </div>
-    <div class="adaptive-m-nav">
-      <div class="m-nav-box">
-        <a href="javascript:" @click="mIsNav = !mIsNav"><em class="ansfont ri-database-2-line"></em></a>
-      </div>
-      <div class="m-title-box">
-        <div class="logo-m"></div>
-      </div>
-      <div class="m-user-box">
-        <a href="javascript:" @click="_goAccount"><em class="el-icon-user"></em></a>
-      </div>
-      <transition name="slide-fade">
-        <div class="m-nav-list" v-if="mIsNav">
-          <ul @click="mIsNav = false">
-            <router-link :to="{ path: '/home' }" tag="li" active-class="active">
-              <em class="ansfont ri-home-4-line"></em>
-              <span>{{ $t('Home') }}</span>
-            </router-link>
-            <router-link :to="{ path: '/projects' }" tag="li" active-class="active">
-              <em class="el-icon-tickets"></em>
-              <span>{{ $t('Project manage') }}</span>
-            </router-link>
-            <router-link :to="{ path: '/dataQuality' }" tag="li" active-class="active">
-              <em class="el-icon-document-checked"></em>
-              <span>{{ $t('DataQuality') }}</span>
-            </router-link>
-            <router-link :to="{ path: '/resource' }" tag="li" active-class="active">
-              <em class="el-icon-folder"></em>
-              <span>{{ $t('Resources manage') }}</span>
-            </router-link>
-            <router-link :to="{ path: '/dataSource' }" tag="li" active-class="active">
-              <em class="ansfont ri-database-2-line"></em>
-              <span>{{ $t('Datasource manage') }}</span>
-            </router-link>
-            <router-link :to="{ path: '/security' }" tag="li" active-class="active" v-ps="['ADMIN_USER']">
-              <em class="ansfont ri-shield-check-line"></em>
-              <span>{{ $t('Security') }}</span>
-            </router-link>
-          </ul>
-        </div>
-      </transition>
     </div>
 
     <el-dialog :visible.sync="definitionUpdateDialog" append-to-body="true" width="auto">
@@ -148,7 +59,7 @@
       ></m-definition-update>
     </el-dialog>
 
-    <el-dialog :visible.sync="fileUpdateDialog" append-to-body="true" width="auto">
+    <el-dialog :visible.sync="fileUpdateDialog" append-to-body="true" width="auto" destroy-on-close>
       <m-file-update
         :type="type"
         @onProgressFileUpdate="onProgressFileUpdate"
@@ -193,9 +104,18 @@ import mResourceChildUpdate from '@/components/fileUpdate/resourceChildUpdate'
 import mDefinitionUpdate from '@/components/fileUpdate/definitionUpdate'
 import mProgressBar from '@/components/progressBar/progressBar'
 import { findLocale, localeList } from '@/module/i18n/config'
+import NavItem from './NavItem.vue'
 
 export default {
   name: 'Nav',
+  components: {
+    mFileUpdate,
+    mProgressBar,
+    mDefinitionUpdate,
+    mFileChildUpdate,
+    mResourceChildUpdate,
+    NavItem,
+  },
   data() {
     return {
       // Whether to drag
@@ -206,8 +126,6 @@ export default {
       isUpdate: false,
       // Whether to log in
       isLogin: false,
-      // Mobile compatible navigation
-      mIsNav: false,
       // Take the language list data to get rid of the language pack
       localeList: _.map(_.cloneDeep(localeList()), (v) => _.omit(v, ['locale'])),
       // Selected language
@@ -222,7 +140,14 @@ export default {
       resourceChildUpdateDialog: false,
     }
   },
-
+  computed: {
+    ...mapState('user', ['userInfo']),
+  },
+  created() {
+    let language = cookies.get('language')
+    this.activeLocale = language ? findLocale(language) : '中文'
+    this.docLink = process.env.NODE_ENV === 'true' ? 'docs' : `/view/docs/${this.activeLocale.code}/_book` // eslint-disable-line
+  },
   methods: {
     ...mapActions('user', ['signOut']),
     /**
@@ -267,16 +192,13 @@ export default {
       this.progress = 0
       this.definitionUpdateDialog = false
     },
-
     onArchiveDefinition() {
       this.isUpdate = true
     },
-
     closeDefinition() {
       this.progress = 0
       this.definitionUpdateDialog = false
     },
-
     onProgressFileUpdate(val) {
       this.progress = val
     },
@@ -294,7 +216,6 @@ export default {
       this.progress = 0
       this.fileUpdateDialog = false
     },
-
     _fileChildUpdate(type, data) {
       if (this.progress) {
         this._toggleArchive()
@@ -304,7 +225,6 @@ export default {
       this.id = data
       this.fileChildUpdateDialog = true
     },
-
     onProgressFileChildUpdate(val) {
       this.progress = val
     },
@@ -315,16 +235,13 @@ export default {
       this.progress = 0
       this.fileChildUpdateDialog = false
     },
-
     onArchiveFileChildUpdate() {
       this.isUpdate = true
     },
-
     closeFileChildUpdate() {
       this.progress = 0
       this.fileChildUpdateDialog = false
     },
-
     _resourceChildUpdate(type, data) {
       if (this.progress) {
         this._toggleArchive()
@@ -351,21 +268,12 @@ export default {
       this.progress = 0
       this.resourceChildUpdateDialog = false
     },
-    /**
-     * Upload popup layer display
-     */
     _toggleArchive() {
       $('.update-file-modal').show()
     },
-    /**
-     * sign out
-     */
     _signOut() {
       this.signOut()
     },
-    /**
-     * Language switching
-     */
     _toggleLanguage(language) {
       console.log(language)
       cookies.set('language', language, { path: '/' })
@@ -373,21 +281,6 @@ export default {
         window.location.reload()
       }, 100)
     },
-  },
-  created() {
-    let language = cookies.get('language')
-    this.activeLocale = language ? findLocale(language) : '中文'
-    this.docLink = process.env.NODE_ENV === 'true' ? 'docs' : `/view/docs/${this.activeLocale.code}/_book` // eslint-disable-line
-  },
-  computed: {
-    ...mapState('user', ['userInfo']),
-  },
-  components: {
-    mFileUpdate,
-    mProgressBar,
-    mDefinitionUpdate,
-    mFileChildUpdate,
-    mResourceChildUpdate,
   },
 }
 </script>
@@ -424,7 +317,7 @@ export default {
       width: 180px;
       height: 46px;
       display: block;
-      background: url('../assets/logo.svg') no-repeat;
+      background: url('../../assets/logo.svg') no-repeat;
     }
   }
   .nav-box {
@@ -433,59 +326,6 @@ export default {
     position: absolute;
     left: 220px;
     top: 0;
-    .list {
-      width: 106px;
-      float: left;
-      position: relative;
-      cursor: pointer;
-      margin-right: 14px;
-      .nav-links {
-        height: 60px;
-        a {
-          position: relative;
-          text-decoration: none;
-          font-size: 15px;
-          color: #333;
-          display: inline-block;
-          // float: left;
-          text-align: center;
-          span {
-            display: block;
-            width: 106px;
-            color: #fff;
-            .ansiconfont {
-              vertical-align: -2px;
-              font-size: 22px;
-              margin-right: 4px;
-            }
-            .ansfont {
-              vertical-align: -6px;
-              font-size: 24px;
-              margin-right: 4px;
-            }
-          }
-          &:hover {
-            span {
-              color: #2d8cf0;
-            }
-          }
-          &.active {
-            span {
-              color: #2d8bf0;
-              i {
-                color: #2d8cf0;
-              }
-            }
-            b {
-              height: 2px;
-              background: #2d8cf0;
-              display: block;
-              margin-top: -2px;
-            }
-          }
-        }
-      }
-    }
   }
   .right {
     position: absolute;

@@ -58,6 +58,8 @@ import ListConstruction from '@/components/listConstruction/ListConstruction'
 
 export default {
   name: 'resource-list-index-FILE',
+  components: { ListConstruction, Conditions, mList, Spin, NoData },
+  mixins: [listUrlParamHandle],
   data() {
     return {
       total: null,
@@ -73,15 +75,23 @@ export default {
       isLeft: true,
     }
   },
-  mixins: [listUrlParamHandle],
-  props: {},
+  watch: {
+    // router
+    $route(a) {
+      // url no params get instance list
+      this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
+    },
+  },
+  beforeDestroy() {
+    sessionStorage.setItem('isLeft', 1)
+  },
   methods: {
     ...mapActions('resource', ['getResourcesListP']),
     /**
      * File Upload
      */
     _uploading() {
-      findComponentDownward(this.$root, 'roof-nav')._fileUpdate('FILE')
+      findComponentDownward(this.$root, 'Nav')._fileUpdate('FILE')
     },
     _onConditions(o) {
       this.searchParams = _.assign(this.searchParams, o)
@@ -110,7 +120,7 @@ export default {
             this.isLoading = false
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.isLoading = false
         })
     },
@@ -123,18 +133,5 @@ export default {
       this._debounceGET()
     },
   },
-  watch: {
-    // router
-    $route(a) {
-      // url no params get instance list
-      this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
-    },
-  },
-  created() {},
-  mounted() {},
-  beforeDestroy() {
-    sessionStorage.setItem('isLeft', 1)
-  },
-  components: { ListConstruction, Conditions, mList, Spin, NoData },
 }
 </script>

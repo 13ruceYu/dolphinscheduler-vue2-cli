@@ -94,7 +94,7 @@ export default {
      * File Upload
      */
     _uploading() {
-      findComponentDownward(this.$root, 'roof-nav')._resourceChildUpdate('UDF', this.searchParams.id)
+      findComponentDownward(this.$root, 'Nav')._resourceChildUpdate('UDF', this.searchParams.id)
     },
     _onConditions(o) {
       this.searchParams = _.assign(this.searchParams, o)
@@ -134,7 +134,7 @@ export default {
             this.isLoading = false
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.isLoading = false
         })
     },

@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <m-popup
     ref="popup"
@@ -16,25 +9,7 @@ governing permissions and * limitations under the License. */
   >
     <template slot="content">
       <form name="files" enctype="multipart/form-data" method="post">
-        <div
-          class="file-update-model"
-          @drop.prevent="_onDrop"
-          @dragover.prevent="dragOver = true"
-          @dragleave.prevent="dragOver = false"
-          id="file-update-model"
-        >
-          <div class="tooltip-info">
-            <em class="ans el-icon-warning"></em>
-            <span>{{ $t('Drag the file into the current upload window') }}</span>
-          </div>
-          <div class="update-popup" v-if="dragOver">
-            <div class="icon-box">
-              <em class="ans el-icon-upload"></em>
-            </div>
-            <p class="p1">
-              <span>{{ $t('Drag area upload') }}</span>
-            </p>
-          </div>
+        <div class="file-update-model" id="file-update-model">
           <ListBoxF>
             <template slot="name"><strong>*</strong>{{ $t('File Name') }}</template>
             <template slot="content">
@@ -65,13 +40,9 @@ governing permissions and * limitations under the License. */
             <template slot="name"><strong>*</strong>{{ $t('Upload Files') }}</template>
             <template slot="content">
               <div class="file-update-box">
-                <template v-if="progress === 0">
-                  <input name="file" id="file" type="file" class="file-update" />
-                  <el-button type="dashed" size="mini">{{ $t('Upload') }}<em class="el-icon-upload"></em></el-button>
-                </template>
-                <div class="progress-box" v-if="progress !== 0">
-                  <m-progress-bar :value="progress" text-placement="left-right"></m-progress-bar>
-                </div>
+                <el-upload :auto-upload="false" :on-change="fileChange" :before-upload="beforeFileUpload">
+                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                </el-upload>
               </div>
             </template>
           </ListBoxF>
@@ -81,76 +52,72 @@ governing permissions and * limitations under the License. */
   </m-popup>
 </template>
 <script>
-import io from '@/module/io'
 import i18n from '@/module/i18n'
-import store from '@/store'
 import mPopup from '@/components/popup/popup'
 import ListBoxF from '@/components/listBoxF/ListBoxF'
-import mProgressBar from '@/components/progressBar/progressBar'
+import { verifyResourceName, uploadResource } from '@/api/modules/resource'
 
 export default {
   name: 'file-update',
-  data() {
-    return {
-      store,
-      // name
-      name: '',
-      // description
-      description: '',
-      // progress
-      progress: 0,
-      // file
-      file: '',
-      currentDir: '/',
-      pid: -1,
-      // Whether to drag upload
-      dragOver: false,
-    }
-  },
-  watch: {},
+  components: { mPopup, ListBoxF },
   props: {
     type: String,
   },
+  data() {
+    return {
+      name: '',
+      description: '',
+      progress: 0,
+      file: '',
+      currentDir: '/',
+      pid: -1,
+    }
+  },
   methods: {
-    /**
-     * submit
-     */
-    _ok() {
+    beforeFileUpload(file) {
+      const isLt1024M = file.size / 1024 / 1024 < 1024
+      if (!isLt1024M) {
+        this.$message.warning(`${i18n.$t('Upload File Size')}`)
+      }
+      return isLt1024M
+    },
+    fileChange(file, fileList) {
+      const { name, raw } = file
+      fileList.length > 1 && fileList.splice(0, 1)
+      this.name = name
+      this.file = raw
+    },
+    async _ok() {
       this.$refs.popup.spinnerLoading = true
       if (this._validation()) {
-        this.store
-          .dispatch('resource/resourceVerifyName', {
+        try {
+          await verifyResourceName({
             fullName: '/' + this.name,
             type: this.type,
           })
-          .then((res) => {
-            const isLt1024M = this.file.size / 1024 / 1024 < 1024
-            if (isLt1024M) {
-              this._formDataUpdate()
-                .then((res) => {
-                  setTimeout(() => {
-                    this.$refs.popup.spinnerLoading = false
-                  }, 800)
-                })
-                .catch((e) => {
-                  this.$refs.popup.spinnerLoading = false
-                })
-            } else {
-              this.$message.warning(`${i18n.$t('Upload File Size')}`)
-              this.$refs.popup.spinnerLoading = false
-            }
-          })
-          .catch((e) => {
-            this.$message.error(e.msg || '')
-            this.$refs.popup.spinnerLoading = false
-          })
+          let formData = new FormData()
+          formData.append('file', this.file)
+          formData.append('type', this.type)
+          formData.append('name', this.name)
+          formData.append('pid', this.pid)
+          formData.append('currentDir', this.currentDir)
+          formData.append('description', this.description)
+          await uploadResource(formData)
+          this.$message.success(i18n.$t('success'))
+          this.$emit('onUpdateFileUpdate')
+        } catch (e) {
+          this.$message.error(e || '')
+          this.$refs.popup.spinnerLoading = false
+        }
       } else {
         this.$refs.popup.spinnerLoading = false
       }
     },
-    /**
-     * validation
-     */
+    resetForm() {
+      this.name = ''
+      this.description = ''
+      this.file = ''
+    },
     _validation() {
       if (!this.name) {
         this.$message.warning(`${i18n.$t('Please enter file name')}`)
@@ -162,95 +129,15 @@ export default {
       }
       return true
     },
-    /**
-     * update file
-     */
-    _formDataUpdate() {
-      return new Promise((resolve, reject) => {
-        let self = this
-        let formData = new FormData()
-        formData.append('file', this.file)
-        formData.append('type', this.type)
-        formData.append('name', this.name)
-        formData.append('pid', this.pid)
-        formData.append('currentDir', this.currentDir)
-        formData.append('description', this.description)
-        io.post(
-          'resources/create',
-          (res) => {
-            this.$message.success(res.msg)
-            resolve()
-            self.$emit('onUpdateFileUpdate')
-          },
-          (e) => {
-            reject(e)
-            self.$emit('closeFileUpdate')
-            this.$message.error(e.msg || '')
-          },
-          {
-            data: formData,
-            emulateJSON: false,
-            onUploadProgress(progressEvent) {
-              // Size has been uploaded
-              let loaded = progressEvent.loaded
-              // Total attachment size
-              let total = progressEvent.total
-              self.progress = Math.floor((100 * loaded) / total)
-              self.$emit('onProgressFileUpdate', self.progress)
-            },
-          }
-        )
-      })
-    },
-    /**
-     * Archive to the top right corner Continue uploading
-     */
-    _ckArchive() {
-      $('.update-file-modal').hide()
-      this.$emit('onArchiveFileUpdate')
-    },
     close() {
       this.$emit('closeFileUpdate')
     },
-    /**
-     * Drag and drop upload
-     */
-    _onDrop(e) {
-      let file = e.dataTransfer.files[0]
-      this.file = file
-      this.name = file.name
-      this.dragOver = false
-    },
   },
-  mounted() {
-    $('#file').change(() => {
-      let file = $('#file')[0].files[0]
-      this.file = file
-      this.name = file.name
-    })
-  },
-  components: { mPopup, ListBoxF, mProgressBar },
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
 .file-update-model {
-  .tooltip-info {
-    position: absolute;
-    left: 20px;
-    bottom: 26px;
-    span {
-      font-size: 12px;
-      color: #666;
-      vertical-align: middle;
-    }
-    .fa,
-    .ans {
-      color: #0097e0;
-      font-size: 14px;
-      vertical-align: middle;
-    }
-  }
   .hide-archive {
     position: absolute;
     right: 22px;
@@ -287,38 +174,6 @@ export default {
         color: #47c3ff;
         cursor: pointer;
       }
-    }
-    .progress-box {
-      width: 200px;
-      position: absolute;
-      left: 70px;
-      top: 14px;
-    }
-  }
-  .update-popup {
-    width: calc(100% - 20px);
-    height: calc(100% - 20px);
-    background: rgba(255, 253, 239, 0.7);
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    border-radius: 3px;
-    z-index: 1;
-    border: 0.18rem dashed #cccccc;
-    .icon-box {
-      text-align: center;
-      margin-top: 96px;
-      .fa,
-      .ans {
-        font-size: 50px;
-        color: #2d8cf0;
-      }
-    }
-    .p1 {
-      text-align: center;
-      font-size: 16px;
-      color: #333;
-      padding-top: 8px;
     }
   }
 }

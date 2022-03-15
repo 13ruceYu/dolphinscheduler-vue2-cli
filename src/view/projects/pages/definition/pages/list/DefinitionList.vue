@@ -87,7 +87,7 @@ export default {
     ...mapActions('dag', ['getProcessListP']),
     // File Upload
     _uploading() {
-      findComponentDownward(this.$root, 'roof-nav')._fileUpdate('DEFINITION')
+      findComponentDownward(this.$root, 'Nav')._fileUpdate('DEFINITION')
     },
     // page
     _page(val) {
@@ -120,7 +120,7 @@ export default {
             this.isLoading = false
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.isLoading = false
         })
     },

@@ -65,7 +65,7 @@ service.interceptors.response.use((res) => {
     case 0:
       return res.data.data
     default:
-      throw new Error(`${res.data.msg}`)
+      throw `${res.data.msg}`
   }
 }, err)
 

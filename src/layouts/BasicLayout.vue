@@ -7,8 +7,8 @@
 
 <script>
 import visibility from '@/module/visibility'
-import MainLayout from './MainLayout.vue'
-import Nav from './Nav.vue'
+import MainLayout from './components/MainLayout.vue'
+import Nav from './components/Nav.vue'
 export default {
   name: 'BasicLayout',
   components: { MainLayout, Nav },
