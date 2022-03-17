@@ -9,6 +9,5 @@ import SecondaryMenu from '@/components/secondaryMenu/SecondaryMenu'
 export default {
   name: 'Resource',
   components: { SecondaryMenu },
-  mounted() {},
 }
 </script>

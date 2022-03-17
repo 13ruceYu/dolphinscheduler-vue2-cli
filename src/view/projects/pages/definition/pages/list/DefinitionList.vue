@@ -33,10 +33,12 @@
             </el-pagination>
           </div>
         </template>
-        <template v-if="!processListP.length && total <= 0">
-          <NoData></NoData>
-        </template>
+        <NoData v-else></NoData>
         <Spin :is-spin="isLoading" :is-left="isLeft"></Spin>
+        <WorkflowUploadDialog
+          :visible.sync="workflowUploadDialogVisible"
+          @uploadFileSuccess="_getList"
+        ></WorkflowUploadDialog>
       </template>
     </ListConstruction>
   </div>
@@ -51,11 +53,12 @@ import NoData from '@/components/noData/NoData'
 import listUrlParamHandle from '@/module/mixin/listUrlParamHandle'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
-import { findComponentDownward } from '@/util/'
+// import { findComponentDownward } from '@/util/'
+import WorkflowUploadDialog from './WorkflowUploadDialog.vue'
 
 export default {
   name: 'DefinitionList',
-  components: { mList, Conditions, Spin, ListConstruction, NoData },
+  components: { mList, Conditions, Spin, ListConstruction, NoData, WorkflowUploadDialog },
   mixins: [listUrlParamHandle],
   data() {
     return {
@@ -69,6 +72,7 @@ export default {
         userId: '',
       },
       isLeft: true,
+      workflowUploadDialogVisible: false,
     }
   },
   watch: {
@@ -87,7 +91,7 @@ export default {
     ...mapActions('dag', ['getProcessListP']),
     // File Upload
     _uploading() {
-      findComponentDownward(this.$root, 'Nav')._fileUpdate('DEFINITION')
+      this.workflowUploadDialogVisible = true
     },
     // page
     _page(val) {

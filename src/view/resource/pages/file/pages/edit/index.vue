@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <ListConstruction :title="$t('File Details')">
     <div slot="content" style="margin: 20px">
@@ -39,10 +32,7 @@ governing permissions and * limitations under the License. */
   </ListConstruction>
 </template>
 <script>
-import i18n from '@/module/i18n'
 import _ from 'lodash'
-import $ from 'jquery'
-import { mapActions } from 'vuex'
 import { filtTypeArr } from '../_source/common'
 import mNoType from '../details/_source/noType'
 import { bytesToSize } from '@/util/util'
@@ -52,11 +42,13 @@ import localStore from '@/util/localStorage'
 import NoData from '@/components/noData/NoData'
 import { handlerSuffix } from '../details/_source/utils'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
+import { getResourceContent, updateResourceContent } from '@/api/modules/resource'
 
 let editor
 
 export default {
   name: 'file-details',
+  components: { ListConstruction, mNoType, Spin, NoData },
   data() {
     return {
       name: '',
@@ -71,32 +63,50 @@ export default {
       msg: '',
     }
   },
-  props: {},
+  created() {
+    let file = _.split(localStore.getItem('file'), '|', 2)
+    let fileName = file[0]
+    let fileSize = file[1]
+    let i = fileName.lastIndexOf('.')
+    let a = fileName.substring(i, fileName.length)
+    this.mode = handlerSuffix[a]
+    this.size = bytesToSize(parseInt(fileSize))
+    this.isViewType = _.includes(this.filtTypeArr, _.trimStart(a, '.'))
+  },
+  mounted() {
+    if (this.isViewType) {
+      this.getViewResources()
+    }
+  },
+  destroyed() {
+    if (editor) {
+      editor.toTextArea()
+      editor.off('keypress', this.keypress)
+    }
+  },
   methods: {
-    ...mapActions('resource', ['getViewResources', 'updateContent']),
-    ok() {
+    async ok() {
       if (this._validation()) {
         this.spinnerLoading = true
-        this.updateContent({
-          id: this.$route.params.id,
-          content: editor.getValue(),
-        })
-          .then((res) => {
-            this.$message.success(res.msg)
-            setTimeout(() => {
-              this.spinnerLoading = false
-              this.close()
-            }, 800)
+        try {
+          await updateResourceContent({
+            id: this.$route.params.id,
+            content: editor.getValue(),
           })
-          .catch((e) => {
-            this.$message.error(e.msg || '')
+          this.$message.success(this.$t('success'))
+          setTimeout(() => {
             this.spinnerLoading = false
-          })
+            this.close()
+          }, 800)
+        } catch (e) {
+          this.$message.error(e || '')
+        }
+        this.spinnerLoading = false
       }
     },
     _validation() {
       if (editor.doc.size > 3000) {
-        this.$message.warning(`${i18n.$t('Resource content cannot exceed 3000 lines')}`)
+        this.$message.warning(`${this.$t('Resource content cannot exceed 3000 lines')}`)
         return false
       }
       return true
@@ -104,32 +114,27 @@ export default {
     close() {
       this.$router.go(-1)
     },
-    _getViewResources() {
+    async getViewResources() {
       this.isLoading = true
-      this.getViewResources({
-        id: this.$route.params.id,
-        skipLineNum: 0,
-        limit: 3000,
-      })
-        .then((res) => {
-          this.name = res.data.alias.split('.')[0]
-          if (!res.data) {
-            this.isData = false
-          } else {
-            this.isData = true
-            let content = res.data.content ? res.data.content + '\n' : ''
-            this._handlerEditor().setValue(content)
-            setTimeout(() => {
-              $('.code-mirror-model').scrollTop(12).scrollLeft(0)
-            }, 200)
-          }
-          this.isLoading = false
+      try {
+        const res = await getResourceContent({
+          id: this.$route.params.id,
+          skipLineNum: 0,
+          limit: 3000,
         })
-        .catch((e) => {
-          this.msg = e.msg || 'error'
-          this.$message.error(e.msg || '')
-          this.isLoading = false
-        })
+        this.name = res.alias.split('.')[0]
+        if (!res) {
+          this.isData = false
+        } else {
+          this.isData = true
+          let content = res.content ? res.content + '\n' : ''
+          this._handlerEditor().setValue(content)
+        }
+      } catch (e) {
+        this.msg = e || 'error'
+        this.$message.error(e || '')
+      }
+      this.isLoading = false
     },
     /**
      * Processing code highlighting
@@ -155,31 +160,6 @@ export default {
       return editor
     },
   },
-  watch: {},
-  created() {
-    let file = _.split(localStore.getItem('file'), '|', 2)
-    let fileName = file[0]
-    let fileSize = file[1]
-    let i = fileName.lastIndexOf('.')
-    let a = fileName.substring(i, fileName.length)
-    this.mode = handlerSuffix[a]
-    this.size = bytesToSize(parseInt(fileSize))
-    this.isViewType = _.includes(this.filtTypeArr, _.trimStart(a, '.'))
-  },
-  mounted() {
-    if (this.isViewType) {
-      // get data
-      this._getViewResources()
-    }
-  },
-  destroyed() {
-    if (editor) {
-      editor.toTextArea()
-      editor.off($('.code-edit-mirror'), 'keypress', this.keypress)
-    }
-  },
-  computed: {},
-  components: { ListConstruction, mNoType, Spin, NoData },
 }
 </script>
 

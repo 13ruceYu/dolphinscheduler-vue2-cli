@@ -80,7 +80,9 @@ governing permissions and * limitations under the License. */
     </template>
   </m-popup>
 </template>
+
 <script>
+import $ from 'jquery'
 import io from '@/module/io'
 import i18n from '@/module/i18n'
 import store from '@/store'
@@ -125,16 +127,16 @@ export default {
             fullName: this.currentDir + '/' + this.name,
             type: this.type,
           })
-          .then((res) => {
+          .then(() => {
             const isLt1024M = this.file.size / 1024 / 1024 < 1024
             if (isLt1024M) {
               this._formDataUpdate()
-                .then((res) => {
+                .then(() => {
                   setTimeout(() => {
                     this.$refs.popup.spinnerLoading = false
                   }, 800)
                 })
-                .catch((e) => {
+                .catch(() => {
                   this.$refs.popup.spinnerLoading = false
                 })
             } else {

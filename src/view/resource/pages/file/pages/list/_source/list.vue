@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <div class="list-model">
     <div class="table-box">
@@ -95,36 +88,47 @@ governing permissions and * limitations under the License. */
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :visible.sync="renameDialog" width="auto">
-      <m-rename :item="item" @onUpDate="onUpDate" @close="close"></m-rename>
-    </el-dialog>
+    <RenameDialog :visible.sync="renameDialogVisible" :item="item" @onUpDate="onUpDate"></RenameDialog>
   </div>
 </template>
 <script>
 import _ from 'lodash'
-import mRename from './rename'
-import { mapActions } from 'vuex'
+import RenameDialog from './RenameDialog.vue'
 import { filtTypeArr } from '../../_source/common'
 import { bytesToSize } from '@/util/util'
 import { downloadFile } from '@/module/download'
 import localStore from '@/util/localStorage'
+import { deleteResource } from '@/api/modules/resource'
+
 export default {
   name: 'file-manage-list',
+  components: { RenameDialog },
+  props: {
+    fileResourcesList: Array,
+    pageNo: Number,
+    pageSize: Number,
+  },
   data() {
     return {
       list: [],
       renameDialog: false,
       item: {},
       index: null,
+      renameDialogVisible: false,
     }
   },
-  props: {
-    fileResourcesList: Array,
-    pageNo: Number,
-    pageSize: Number,
+  watch: {
+    fileResourcesList(a) {
+      this.list = []
+      setTimeout(() => {
+        this.list = a
+      })
+    },
+  },
+  mounted() {
+    this.list = this.fileResourcesList
   },
   methods: {
-    ...mapActions('resource', ['deleteResource']),
     _edit(item) {
       localStore.setItem('file', `${item.alias}|${item.size}`)
       this.$router.push({ path: `/resource/file/edit/${item.id}` })
@@ -146,33 +150,27 @@ export default {
     _rtSize(val) {
       return bytesToSize(parseInt(val))
     },
-    _delete(item, i) {
-      this.deleteResource({
-        id: item.id,
-      })
-        .then((res) => {
-          this.$emit('on-update')
-          this.$message.success(res.msg)
-        })
-        .catch((e) => {
-          this.$message.error(e.msg || '')
-        })
+    async _delete(item) {
+      try {
+        await deleteResource({ id: item.id })
+        this.$emit('on-update')
+        this.$message.success(this.$t('success'))
+      } catch (e) {
+        this.$message.error(e.msg || '')
+      }
     },
     _rename(item, i) {
       this.item = item
       this.index = i
-      this.renameDialog = true
+      this.renameDialogVisible = true
     },
-
     onUpDate(item) {
       this.$set(this.list, this.index, item)
       this.renameDialog = false
     },
-
     close() {
       this.renameDialog = false
     },
-
     _rtDisb({ alias, size }) {
       let i = alias.lastIndexOf('.')
       let a = alias.substring(i, alias.length)
@@ -185,18 +183,5 @@ export default {
       return !flag
     },
   },
-  watch: {
-    fileResourcesList(a) {
-      this.list = []
-      setTimeout(() => {
-        this.list = a
-      })
-    },
-  },
-  created() {},
-  mounted() {
-    this.list = this.fileResourcesList
-  },
-  components: { mRename },
 }
 </script>

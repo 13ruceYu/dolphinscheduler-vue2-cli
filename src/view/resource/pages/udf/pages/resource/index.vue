@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <ListConstruction :title="$t('UDF Resources')">
     <template slot="conditions">
@@ -42,26 +35,25 @@ governing permissions and * limitations under the License. */
           </el-pagination>
         </div>
       </template>
-      <template v-if="!udfResourcesList.length && total <= 0">
-        <NoData></NoData>
-      </template>
+      <NoData v-else></NoData>
       <Spin :is-spin="isLoading" :is-left="isLeft"></Spin>
+      <FileUploadDialog :visible.sync="fileUploadShow" :type="'UDF'" @uploadFileSuccess="_getList"></FileUploadDialog>
     </template>
   </ListConstruction>
 </template>
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex'
 import mList from './_source/list'
 import Spin from '@/components/spin/Spin'
-import { findComponentDownward } from '@/util/'
 import NoData from '@/components/noData/NoData'
-import listUrlParamHandle from '@/module/mixin/listUrlParamHandle'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
+import { getResourceListPage } from '@/api/modules/resource'
+import FileUploadDialog from '@/components/fileUploadDialog/FileUploadDialog.vue'
 
 export default {
   name: 'resource-list-index-UDF',
+  components: { ListConstruction, Conditions, mList, Spin, NoData, FileUploadDialog },
   data() {
     return {
       total: null,
@@ -75,17 +67,26 @@ export default {
         type: 'UDF',
       },
       isLeft: true,
+      fileUploadShow: false,
     }
   },
-  mixins: [listUrlParamHandle],
-  props: {},
+  watch: {
+    searchParams: {
+      handler() {
+        this._getList()
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this._getList()
+  },
+  beforeDestroy() {
+    sessionStorage.setItem('isLeft', 1)
+  },
   methods: {
-    ...mapActions('resource', ['getResourcesListP']),
-    /**
-     * File Upload
-     */
     _uploading() {
-      findComponentDownward(this.$root, 'Nav')._fileUpdate('UDF')
+      this.fileUploadShow = true
     },
     _onConditions(o) {
       this.searchParams = _.assign(this.searchParams, o)
@@ -98,48 +99,30 @@ export default {
       this.searchParams.pageSize = val
     },
     _onUpdate() {
-      this._debounceGET()
+      this._getList()
     },
     _updateList() {
       this.searchParams.pageNo = 1
       this.searchParams.searchVal = ''
-      this._debounceGET()
+      this._getList()
     },
-    _getList(flag) {
-      if (sessionStorage.getItem('isLeft') === 0) {
-        this.isLeft = false
-      } else {
-        this.isLeft = true
-      }
+    async _getList(flag) {
+      sessionStorage.getItem('isLeft') === 0 ? (this.isLeft = false) : (this.isLeft = true)
       this.isLoading = !flag
-      this.getResourcesListP(this.searchParams)
-        .then((res) => {
-          if (this.searchParams.pageNo > 1 && res.totalList.length === 0) {
-            this.searchParams.pageNo = this.searchParams.pageNo - 1
-          } else {
-            this.udfResourcesList = []
-            this.udfResourcesList = res.totalList
-            this.total = res.total
-            this.isLoading = false
-          }
-        })
-        .catch(() => {
-          this.isLoading = false
-        })
+      try {
+        const res = await getResourceListPage(this.searchParams)
+        if (this.searchParams.pageNo > 1 && res.totalList.length === 0) {
+          this.searchParams.pageNo = this.searchParams.pageNo - 1
+        } else {
+          this.udfResourcesList = []
+          this.udfResourcesList = res.totalList
+          this.total = res.total
+        }
+      } catch (e) {
+        this.$message.error(e || '')
+      }
+      this.isLoading = false
     },
   },
-  watch: {
-    // router
-    $route(a) {
-      // url no params get instance list
-      this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
-    },
-  },
-  created() {},
-  mounted() {},
-  beforeDestroy() {
-    sessionStorage.setItem('isLeft', 1)
-  },
-  components: { ListConstruction, Conditions, mList, Spin, NoData },
 }
 </script>

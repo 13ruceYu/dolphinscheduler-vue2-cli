@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <div class="list-model">
     <div class="table-box">
@@ -87,33 +80,45 @@ governing permissions and * limitations under the License. */
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :visible.sync="renameDialog" width="45%">
-      <m-rename :item="item" @onUpDate="onUpDate" @close="close"></m-rename>
-    </el-dialog>
+    <RenameDialog :visible.sync="renameDialogVisible" :item="item" :type="'UDF'" @onUpDate="onUpDate"></RenameDialog>
   </div>
 </template>
+
 <script>
-import { mapActions } from 'vuex'
-import mRename from './rename'
+import RenameDialog from '@/view/resource/components/RenameDialog.vue'
 import { downloadFile } from '@/module/download'
 import { bytesToSize } from '@/util/util'
 import localStore from '@/util/localStorage'
+import { deleteResource } from '@/api/modules/resource'
+
 export default {
   name: 'udf-manage-list',
-  data() {
-    return {
-      list: [],
-      renameDialog: false,
-      index: null,
-    }
-  },
+  components: { RenameDialog },
   props: {
     udfResourcesList: Array,
     pageNo: Number,
     pageSize: Number,
   },
+  data() {
+    return {
+      list: [],
+      renameDialog: false,
+      index: null,
+      renameDialogVisible: false,
+    }
+  },
+  watch: {
+    udfResourcesList(a) {
+      this.list = []
+      setTimeout(() => {
+        this.list = a
+      })
+    },
+  },
+  mounted() {
+    this.list = this.udfResourcesList
+  },
   methods: {
-    ...mapActions('resource', ['deleteResource']),
     _downloadFile(item) {
       downloadFile('resources/download', {
         id: item.id,
@@ -129,22 +134,19 @@ export default {
     _rtSize(val) {
       return bytesToSize(parseInt(val))
     },
-    _delete(item, i) {
-      this.deleteResource({
-        id: item.id,
-      })
-        .then((res) => {
-          this.$emit('on-update')
-          this.$message.success(res.msg)
-        })
-        .catch((e) => {
-          this.$message.error(e.msg || '')
-        })
+    async _delete(item) {
+      try {
+        await deleteResource({ id: item.id })
+        this.$emit('on-update')
+        this.$message.success(this.$t('success'))
+      } catch (e) {
+        this.$message.error(e.msg || '')
+      }
     },
     _rename(item, i) {
       this.item = item
       this.index = i
-      this.renameDialog = true
+      this.renameDialogVisible = true
     },
     onUpDate(item) {
       this.$set(this.list, this.index, item)
@@ -155,18 +157,5 @@ export default {
       this.renameDialog = false
     },
   },
-  watch: {
-    udfResourcesList(a) {
-      this.list = []
-      setTimeout(() => {
-        this.list = a
-      })
-    },
-  },
-  created() {},
-  mounted() {
-    this.list = this.udfResourcesList
-  },
-  components: { mRename },
 }
 </script>
