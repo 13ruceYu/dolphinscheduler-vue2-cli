@@ -1,5 +1,5 @@
 <template>
-  <ListConstruction :title="searchParams.projectId ? $t('Project Home') : $t('Home')">
+  <ListConstruction :title="searchParams.projectId ? `${$t('Project Home')} - ${projectName}` : $t('Home')">
     <template slot="content">
       <div class="perject-home-content">
         <div class="time-model">
@@ -45,6 +45,7 @@
     </template>
   </ListConstruction>
 </template>
+
 <script>
 import dayjs from 'dayjs'
 import DefineUserCount from './components/DefineUserCount'
@@ -72,10 +73,12 @@ export default {
         endDate: '',
       },
       dataTime: [],
+      projectName: '',
     }
   },
   created() {
     this.searchParams.projectId = this.id === 0 ? 0 : localStore.getItem('projectId')
+    this.projectName = this.id === 0 ? '' : localStore.getItem('projectName')
     this.dataTime[0] = dayjs().format('YYYY-MM-DD 00:00:00')
     this.dataTime[1] = dayjs().format('YYYY-MM-DD HH:mm:ss')
   },

@@ -37,9 +37,7 @@
           </el-pagination>
         </div>
       </template>
-      <template v-if="!projectsList.length && total <= 0">
-        <NoData></NoData>
-      </template>
+      <NoData v-else></NoData>
       <Spin :is-spin="isLoading" :is-left="false"></Spin>
     </template>
   </ListConstruction>
@@ -96,7 +94,6 @@ export default {
       this.searchParams = _.assign(this.searchParams, o)
       this.searchParams.pageNo = 1
     },
-
     _page(val) {
       this.searchParams.pageNo = val
     },

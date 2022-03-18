@@ -7,3 +7,27 @@ export function uploadWorkflow(data) {
     data,
   })
 }
+
+export function getTaskStatusCount(params) {
+  return axios({
+    method: 'get',
+    url: '/projects/analysis/task-state-count',
+    params,
+  })
+}
+
+export function getProcessStateCount(params) {
+  return axios({
+    method: 'get',
+    url: '/projects/analysis/process-state-count',
+    params,
+  })
+}
+
+export function getDefineUserCount(params) {
+  return axios({
+    method: 'get',
+    url: '/projects/analysis/define-user-count',
+    params,
+  })
+}

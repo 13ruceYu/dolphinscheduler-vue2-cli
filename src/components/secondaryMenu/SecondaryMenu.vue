@@ -11,7 +11,7 @@
             <div class="name" @click="_toggleSubMenu(item)">
               <a href="javascript:">
                 <em class="fa icon" :class="item.icon"></em>
-                <span>{{ item.name }}</span>
+                <span>{{ item.name }}{{ item.path === 'projects-home' ? ` - ${projectName}` : '' }}</span>
                 <em
                   class="fa angle"
                   :class="item.isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"
@@ -45,8 +45,11 @@
     </div>
   </div>
 </template>
+
 <script>
+import $ from 'jquery'
 import menu from './_source/menu'
+import localStore from '@/util/localStorage'
 
 export default {
   name: 'SecondaryMenu',
@@ -61,6 +64,7 @@ export default {
       id: this.$route.params.id,
       isTogHide: false,
       isLeft: true,
+      projectName: '',
     }
   },
   watch: {
@@ -68,6 +72,9 @@ export default {
       let layoutBox = $('.main-layout-box')
       is ? layoutBox.addClass('toggle') : layoutBox.removeClass('toggle')
     },
+  },
+  mounted() {
+    this.projectName = localStore.getItem('projectName')
   },
   methods: {
     _toggleSubMenu(item) {

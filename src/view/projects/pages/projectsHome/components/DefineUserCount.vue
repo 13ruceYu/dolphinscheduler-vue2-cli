@@ -5,17 +5,16 @@
         <div id="process-definition-bar" style="height: 500px"></div>
       </div>
     </div>
-    <div v-else>
-      <NoData :height="530"></NoData>
-    </div>
+    <NoData v-else :height="530"></NoData>
   </div>
 </template>
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex'
 import { bar } from './chartConfig'
 import Chart from '@/module/ana-charts'
 import NoData from '@/components/noData/NoData'
+import { getDefineUserCount } from '@/api/modules/projects'
+
 export default {
   name: 'DefineUserCount',
   components: { NoData },
@@ -27,32 +26,40 @@ export default {
       isSpin: true,
       msg: true,
       parameter: { projectId: 0 },
+      defineUserList: [],
     }
   },
-  created() {
+  watch: {
+    defineUserList(newVal) {
+      if (!_.isEmpty(newVal)) {
+        this.initChart(newVal)
+      } else {
+        this.noData = true
+      }
+    },
+  },
+  async mounted() {
     this.isSpin = true
     this.parameter.projectId = this.projectId
-    this.getDefineUserCount(this.parameter)
-      .then((res) => {
-        this.msg = res.data.count > 0
-        this.defineUserList = []
-        this._handleDefineUser(res)
-        this.isSpin = false
-      })
-      .catch((e) => {
-        this.isSpin = false
-      })
+    const data = (await this.getDefineUserCount()) || []
+    this.defineUserList = _.map(data, (v) => {
+      return {
+        key: v.userName + ',' + v.userId + ',' + v.count,
+        value: v.count,
+      }
+    })
+    this.isSpin = false
   },
   methods: {
-    ...mapActions('projects', ['getDefineUserCount']),
-    _handleDefineUser(res) {
-      let data = res.data.userList || []
-      this.defineUserList = _.map(data, (v) => {
-        return {
-          key: v.userName + ',' + v.userId + ',' + v.count,
-          value: v.count,
-        }
-      })
+    async getDefineUserCount() {
+      try {
+        const res = await getDefineUserCount(this.parameter)
+        return res.userList
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    initChart() {
       const myChart = Chart.bar('#process-definition-bar', this.defineUserList, {})
       myChart.echart.setOption(bar)
       // Jump not allowed on home page

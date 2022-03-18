@@ -97,7 +97,7 @@ export default {
       this.setProjectName(item.name)
       localStore.setItem('projectName', `${item.name}`)
       localStore.setItem('projectId', `${item.id}`)
-      this.$router.push({ path: '/projects/home' })
+      this.$router.push({ path: `/projects/home` })
     },
     /**
      * Delete Project
