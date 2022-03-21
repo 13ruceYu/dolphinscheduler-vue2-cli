@@ -13,6 +13,45 @@
   }
 }
 
+.home-main {
+  min-height: calc(100vh - 100px);
+  background: #fff;
+  margin: 20px;
+  border-radius: 3px;
+  > .content-title {
+    height: 48px;
+    background: #f8fbfe;
+    border-radius: 3px 3px 0 0;
+    span {
+      font-size: 22px;
+      padding-left: 18px;
+      padding-top: 10px;
+      display: inline-block;
+      color: #2a455b;
+    }
+  }
+  .conditions-model {
+    height: 50px;
+    position: relative;
+    .left {
+      position: absolute;
+      left: 12px;
+      top: 13px;
+    }
+    .right {
+      position: absolute;
+      right: 8px;
+      top: 13px;
+      .from-box {
+        .list {
+          float: right;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+}
+
 .clearfix,
 .outer {
   zoom: 1;
@@ -28,8 +67,15 @@
 }
 
 body {
+  background: #edeeed;
   font-family: PingFangSC-Light, Helvetica Neue, Helvetica, Microsoft Yahei, Arial, Hiragino Sans GB, tahoma, SimSun,
     sans-serif;
+  backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -112,20 +158,4 @@ input::-ms-reveal {
 a,
 body {
   color: #333;
-}
-
-body::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-body::-webkit-scrollbar-track {
-  background: hsla(0, 0%, 100%, 0);
-  border-radius: 2x;
-  margin: 4px 0;
-}
-body::-webkit-scrollbar-thumb {
-  background: hsla(0, 0%, 100%, 0);
-  border-radius: 2px;
-  -webkit-transition: background 0.2s ease-in-out;
-  transition: background 0.2s ease-in-out;
 }

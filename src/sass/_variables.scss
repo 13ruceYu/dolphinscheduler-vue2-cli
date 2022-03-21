@@ -1,0 +1,22 @@
+// spacing
+// level: 0-5
+// .mt-1: margin-top level1
+$spacing-types: (
+  m: margin,
+  p: padding
+);
+$spacing-directions: (
+  t: top,
+  b: bottom,
+  l: left,
+  r: right
+);
+$spacing-base-size: 1rem;
+$spacing-sizes: (
+  0: 0,
+  1: 0.25,
+  2: 0.5,
+  3: 1,
+  4: 1.5,
+  5: 3
+);

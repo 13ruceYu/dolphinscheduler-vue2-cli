@@ -32,5 +32,23 @@ export default {
     width: 100%;
     min-height: calc(100% - 60px);
   }
+  &.dag-screen {
+    .m-top {
+      position: unset;
+    }
+    .m-bottom {
+      z-index: 2;
+    }
+    .index-model {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: -20px;
+      left: -20px;
+      .dag-model {
+        height: 100% !important;
+      }
+    }
+  }
 }
 </style>

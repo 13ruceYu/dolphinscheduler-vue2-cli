@@ -15,7 +15,6 @@ import '@/module/filter/filterNull'
 import themeData from '@/module/echarts/themeData.json'
 import 'canvg/dist/browser/canvg.min.js'
 
-import 'normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import './sass/index.scss'
 import 'remixicon/fonts/remixicon.css'

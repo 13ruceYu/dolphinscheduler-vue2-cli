@@ -31,3 +31,11 @@ export function getDefineUserCount(params) {
     params,
   })
 }
+
+export function getProjectsList(params) {
+  return axios({
+    method: 'get',
+    url: '/projects/list-paging',
+    params,
+  })
+}

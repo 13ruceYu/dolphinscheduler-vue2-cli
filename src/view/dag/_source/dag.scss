@@ -1,20 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 .dag-model {
   background: url('../img/dag_bg.png');
   height: calc(100vh - 100px);
@@ -172,16 +155,10 @@
       background: #f2f3f7;
       position: relative;
       border-radius: 0 3px 0 0;
-      .ans-btn-text {
-        color: #337ab7;
-        .ans-icon {
-          font-size: 16px;
-        }
-      }
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       .assist-btn {
-        position: absolute;
-        left: 10px;
-        top: 7px;
         > .name {
           padding-left: 6px;
           vertical-align: middle;
@@ -204,9 +181,6 @@
         }
       }
       .save-btn {
-        position: absolute;
-        right: 8px;
-        top: 6px;
         .operation {
           overflow: hidden;
           display: inline-block;
@@ -387,10 +361,7 @@ svg path:hover {
 .canvas-wide {
   padding-top: 10px;
   margin-left: 0;
-  -ms-transition: all 0.1s ease-out;
-  -moz-transition: all 0.1s ease-out;
-  -webkit-transition: all 0.1s ease-out;
-  -o-transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;
 }
 
 .jtk-demo-dataset {
@@ -494,10 +465,7 @@ svg path:hover {
   .icos {
     background-color: #333;
     color: #333;
-    -ms-transition: all 0.6s ease-out;
-    -moz-transition: all 0.6s ease-out;
-    -webkit-transition: all 0.6s ease-out;
-    -o-transition: all 0.6s ease-out;
+    transition: all 0.6s ease-out;
   }
 }
 
@@ -505,10 +473,7 @@ svg path:hover {
   .icos {
     background-color: #2db7f5;
     color: #0097e0;
-    -ms-transition: all 0.6s ease-out;
-    -moz-transition: all 0.6s ease-out;
-    -webkit-transition: all 0.6s ease-out;
-    -o-transition: all 0.6s ease-out;
+    transition: all 0.6s ease-out;
   }
 }
 

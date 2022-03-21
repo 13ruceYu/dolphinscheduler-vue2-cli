@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <div class="clearfix dag-model">
     <div class="toolbar">
@@ -30,17 +23,15 @@ governing permissions and * limitations under the License. */
       <div class="dag-toolbar">
         <div class="assist-btn">
           <el-tooltip :content="$t('View variables')" placement="top" :enterable="false">
-            <span>
-              <el-button
-                style="vertical-align: middle"
-                type="primary"
-                size="mini"
-                :disabled="$route.name !== 'projects-instance-details'"
-                @click="_toggleView"
-                icon="el-icon-c-scale-to-original"
-              >
-              </el-button>
-            </span>
+            <el-button
+              class="mx-1"
+              type="primary"
+              size="mini"
+              icon="el-icon-c-scale-to-original"
+              :disabled="$route.name !== 'projects-instance-details'"
+              @click="_toggleView"
+            >
+            </el-button>
           </el-tooltip>
           <el-tooltip :content="$t('Startup parameter')" placement="top" :enterable="false">
             <span>
@@ -48,15 +39,14 @@ governing permissions and * limitations under the License. */
                 style="vertical-align: middle"
                 type="primary"
                 size="mini"
+                icon="el-icon-arrow-right"
                 :disabled="$route.name !== 'projects-instance-details'"
                 @click="_toggleParam"
-                icon="el-icon-arrow-right"
               >
               </el-button>
             </span>
           </el-tooltip>
           <span class="name">{{ name }}</span>
-          &nbsp;
           <span v-if="name" class="copy-name" @click="_copyName" :data-clipboard-text="name"
             ><em class="el-icon-copy-document" data-container="body" data-toggle="tooltip" :title="$t('Copy name')"></em
           ></span>
@@ -79,11 +69,11 @@ governing permissions and * limitations under the License. */
           <el-tooltip :content="$t('Format DAG')" placement="top" :enterable="false">
             <span>
               <el-button
+                class="mr-1"
                 type="primary"
                 icon="el-icon-caret-right"
                 size="mini"
                 v-if="(type === 'instance' || 'definition') && urlParam.id != undefined"
-                style="vertical-align: middle"
                 @click="dagAutomaticLayout"
               >
               </el-button>
@@ -92,7 +82,7 @@ governing permissions and * limitations under the License. */
           <el-tooltip :content="$t('Refresh DAG status')" placement="top" :enterable="false">
             <span>
               <el-button
-                style="vertical-align: middle"
+                class="mr-1"
                 icon="el-icon-refresh"
                 type="primary"
                 :loading="isRefresh"
@@ -103,14 +93,7 @@ governing permissions and * limitations under the License. */
               </el-button>
             </span>
           </el-tooltip>
-          <el-button
-            v-if="isRtTasks"
-            style="vertical-align: middle"
-            type="primary"
-            size="mini"
-            icon="el-icon-back"
-            @click="_rtNodesDag"
-          >
+          <el-button v-if="isRtTasks" class="mr-1" type="primary" size="mini" icon="el-icon-back" @click="_rtNodesDag">
             {{ $t('Return_1') }}
           </el-button>
           <span>
@@ -119,14 +102,14 @@ governing permissions and * limitations under the License. */
               icon="el-icon-switch-button"
               size="mini"
               v-if="type === 'instance' || 'definition'"
-              style="vertical-align: middle"
+              class="mr-1"
               @click="_closeDAG"
             >
               {{ $t('Close') }}
             </el-button>
           </span>
           <el-button
-            style="vertical-align: middle"
+            class="mr-1"
             type="primary"
             size="mini"
             :loading="spinnerLoading"
@@ -137,7 +120,7 @@ governing permissions and * limitations under the License. */
           </el-button>
           <span>
             <el-button
-              style="vertical-align: middle"
+              class="mr-1"
               type="primary"
               size="mini"
               :loading="spinnerLoading"
@@ -198,6 +181,7 @@ governing permissions and * limitations under the License. */
     </div>
   </div>
 </template>
+
 <script>
 import $ from 'jquery'
 import _ from 'lodash'
@@ -221,6 +205,12 @@ let eventModel
 
 export default {
   name: 'dag-chart',
+  mixins: [disabledState],
+  components: { mVersions, mFormModel, mFormLineModel, mUdp, mStart },
+  props: {
+    type: String,
+    releaseState: String,
+  },
   data() {
     return {
       tasksTypeList: tasksType,
@@ -271,10 +261,68 @@ export default {
       sourceType: '',
     }
   },
-  mixins: [disabledState],
-  props: {
-    type: String,
-    releaseState: String,
+  computed: {
+    ...mapState('dag', ['tasks', 'locations', 'connects', 'isEditDag', 'name']),
+  },
+  watch: {
+    tasks: {
+      deep: true,
+      handler() {
+        // Edit state does not allow deletion of node a...
+        this.setIsEditDag(true)
+      },
+    },
+  },
+  created() {
+    // Edit state does not allow deletion of node a...
+    this.setIsEditDag(false)
+
+    if (this.$route.query.subProcessIds) {
+      this.isRtTasks = true
+    }
+
+    Dag.init({
+      dag: this,
+      instance: jsPlumb.getInstance({
+        Endpoint: ['Dot', { radius: 1, cssClass: 'dot-style' }],
+        Connector: 'Bezier',
+        PaintStyle: { lineWidth: 2, stroke: '#456' }, // Connection style
+        ConnectionOverlays: [
+          [
+            'Arrow',
+            {
+              location: 1,
+              id: 'arrow',
+              length: 12,
+              foldback: 0.8,
+            },
+          ],
+          [
+            'Label',
+            {
+              location: 0.5,
+              id: 'label',
+            },
+          ],
+        ],
+        Container: 'canvas',
+        ConnectionsDetachable: true,
+      }),
+    })
+  },
+  mounted() {
+    this.init(this.arg)
+  },
+  beforeDestroy() {
+    this.resetParams()
+
+    // Destroy round robin
+    clearInterval(this.setIntervalP)
+  },
+  destroyed() {
+    if (eventModel) {
+      eventModel.remove()
+    }
   },
   methods: {
     ...mapActions('dag', [
@@ -868,70 +916,6 @@ export default {
       this.drawer = false
     },
   },
-  watch: {
-    tasks: {
-      deep: true,
-      handler() {
-        // Edit state does not allow deletion of node a...
-        this.setIsEditDag(true)
-      },
-    },
-  },
-  created() {
-    // Edit state does not allow deletion of node a...
-    this.setIsEditDag(false)
-
-    if (this.$route.query.subProcessIds) {
-      this.isRtTasks = true
-    }
-
-    Dag.init({
-      dag: this,
-      instance: jsPlumb.getInstance({
-        Endpoint: ['Dot', { radius: 1, cssClass: 'dot-style' }],
-        Connector: 'Bezier',
-        PaintStyle: { lineWidth: 2, stroke: '#456' }, // Connection style
-        ConnectionOverlays: [
-          [
-            'Arrow',
-            {
-              location: 1,
-              id: 'arrow',
-              length: 12,
-              foldback: 0.8,
-            },
-          ],
-          [
-            'Label',
-            {
-              location: 0.5,
-              id: 'label',
-            },
-          ],
-        ],
-        Container: 'canvas',
-        ConnectionsDetachable: true,
-      }),
-    })
-  },
-  mounted() {
-    this.init(this.arg)
-  },
-  beforeDestroy() {
-    this.resetParams()
-
-    // Destroy round robin
-    clearInterval(this.setIntervalP)
-  },
-  destroyed() {
-    if (eventModel) {
-      eventModel.remove()
-    }
-  },
-  computed: {
-    ...mapState('dag', ['tasks', 'locations', 'connects', 'isEditDag', 'name']),
-  },
-  components: { mVersions, mFormModel, mFormLineModel, mUdp, mStart },
 }
 </script>
 

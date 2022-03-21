@@ -1,75 +1,8 @@
 @import 'scrollbar';
 @import 'table';
-@import 'nav.scss';
 @import 'global.scss';
-
-body {
-  background: #edeeed;
-  .home-main {
-    min-height: calc(100vh - 100px);
-    background: #fff;
-    margin: 20px;
-    border-radius: 3px;
-    > .content-title {
-      height: 48px;
-      background: #f8fbfe;
-      border-radius: 3px 3px 0 0;
-      span {
-        font-size: 22px;
-        padding-left: 18px;
-        padding-top: 10px;
-        display: inline-block;
-        color: #2a455b;
-      }
-    }
-    .conditions-model {
-      height: 50px;
-      position: relative;
-      .left {
-        position: absolute;
-        left: 12px;
-        top: 13px;
-      }
-      .right {
-        position: absolute;
-        right: 8px;
-        top: 13px;
-        .from-box {
-          .list {
-            float: right;
-            margin-right: 4px;
-          }
-        }
-      }
-    }
-  }
-  .main-layout-model {
-    &.dag-screen {
-      .m-top {
-        position: unset;
-      }
-      .m-bottom {
-        z-index: 2;
-      }
-      .index-model {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: -20px;
-        left: -20px;
-        .dag-model {
-          height: 100% !important;
-        }
-      }
-    }
-  }
-  backface-visibility: hidden;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-text-size-adjust: none;
-  -webkit-touch-callout: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import 'element-ui.scss';
+@import 'variables';
 
 // icon disabled state
 .iconfont.icon-disabled {
@@ -81,16 +14,38 @@ body {
   border-radius: 3px;
 }
 
-.el-dialog__wrapper .el-dialog {
-  display: table;
-  width: auto;
-}
-
 .vue-treeselect__multi-value {
   max-height: 200px;
   overflow: auto;
 }
 
-.el-dialog__body {
-  padding: 10px;
+// .m-0
+@each $typeKey, $type in $spacing-types {
+  // .m-1
+  @each $sizeKey, $size in $spacing-sizes {
+    .#{$typeKey}-#{$sizeKey} {
+      #{$type}: $size * $spacing-base-size;
+    }
+  }
+
+  // .mx-1, .my-1
+  @each $sizeKey, $size in $spacing-sizes {
+    .#{$typeKey}x-#{$sizeKey} {
+      #{$type}-left: $size * $spacing-base-size;
+      #{$type}-right: $size * $spacing-base-size;
+    }
+    .#{$typeKey}y-#{$sizeKey} {
+      #{$type}-top: $size * $spacing-base-size;
+      #{$type}-bottom: $size * $spacing-base-size;
+    }
+  }
+
+  // .mt-1
+  @each $directionKey, $direction in $spacing-directions {
+    @each $sizeKey, $size in $spacing-sizes {
+      .#{$typeKey}#{$directionKey}-#{$sizeKey} {
+        #{$type}-#{$direction}: $size * $spacing-base-size;
+      }
+    }
+  }
 }

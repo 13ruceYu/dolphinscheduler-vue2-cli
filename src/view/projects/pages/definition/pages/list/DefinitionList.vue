@@ -53,7 +53,6 @@ import NoData from '@/components/noData/NoData'
 import listUrlParamHandle from '@/module/mixin/listUrlParamHandle'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
-// import { findComponentDownward } from '@/util/'
 import WorkflowUploadDialog from './WorkflowUploadDialog.vue'
 
 export default {
@@ -140,7 +139,7 @@ export default {
 }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" scoped>
 .wrap-definition {
   .table-box {
     overflow-y: scroll;

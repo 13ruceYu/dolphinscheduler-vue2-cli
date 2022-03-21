@@ -19,7 +19,7 @@
             {{ scope.row.directory ? $t('Yes') : $t('No') }}
           </template>
         </el-table-column>
-        <el-table-column prop="fileName" :label="$t('File Name')"></el-table-column>
+        <el-table-column prop="fileName" :label="$t('File Name')" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('Description')" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.description | filterNull }}</span>

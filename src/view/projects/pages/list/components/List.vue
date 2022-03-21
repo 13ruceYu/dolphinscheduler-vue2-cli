@@ -36,24 +36,32 @@
             <el-tooltip :content="$t('Edit')" placement="top" :enterable="false">
               <span
                 ><el-button
+                  class="opt-btn"
                   type="primary"
                   size="mini"
                   icon="el-icon-edit-outline"
-                  @click="_edit(scope.row)"
                   circle
+                  @click="_edit(scope.row)"
                 ></el-button
               ></span>
             </el-tooltip>
             <el-tooltip :content="$t('delete')" placement="top" :enterable="false">
               <el-popconfirm
-                :confirmButtonText="$t('Confirm')"
-                :cancelButtonText="$t('Cancel')"
                 icon="el-icon-info"
                 iconColor="red"
+                :confirmButtonText="$t('Confirm')"
+                :cancelButtonText="$t('Cancel')"
                 :title="$t('Delete?')"
                 @onConfirm="_delete(scope.row, scope.row.id)"
               >
-                <el-button type="danger" size="mini" icon="el-icon-delete" circle slot="reference"></el-button>
+                <el-button
+                  class="opt-btn"
+                  type="danger"
+                  size="mini"
+                  icon="el-icon-delete"
+                  circle
+                  slot="reference"
+                ></el-button>
               </el-popconfirm>
             </el-tooltip>
           </template>
@@ -99,11 +107,6 @@ export default {
       localStore.setItem('projectId', `${item.id}`)
       this.$router.push({ path: `/projects/home` })
     },
-    /**
-     * Delete Project
-     * @param item Current record
-     * @param i index
-     */
     _delete(item) {
       this.deleteProjects({
         projectId: item.id,
@@ -116,13 +119,15 @@ export default {
           this.$message.error(e.msg || '')
         })
     },
-    /**
-     * edit project
-     * @param item Current record
-     */
     _edit(item) {
       findComponentDownward(this.$root, 'ProjectsList')._create(item)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.opt-btn {
+  margin-right: 5px;
+}
+</style>

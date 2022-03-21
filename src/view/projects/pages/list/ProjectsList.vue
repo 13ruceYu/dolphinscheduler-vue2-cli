@@ -5,10 +5,9 @@
         <template slot="button-group">
           <el-button size="mini" @click="_create('')">{{ $t('Create Project') }}</el-button>
           <el-dialog
-            :title="item ? $t('Edit') : $t('Create Project')"
             v-if="createProjectDialog"
+            :title="item ? $t('Edit') : $t('Create Project')"
             :visible.sync="createProjectDialog"
-            width="auto"
           >
             <CreateProject :item="item" @_onUpdate="_onUpdate" @close="_close"></CreateProject>
           </el-dialog>
@@ -42,16 +41,16 @@
     </template>
   </ListConstruction>
 </template>
+
 <script>
-import { mapActions } from 'vuex'
 import _ from 'lodash'
-import listUrlParamHandle from '@/module/mixin/listUrlParamHandle'
 import List from './components/List'
 import CreateProject from './components/CreateProject'
 import Spin from '@/components/spin/Spin'
 import NoData from '@/components/noData/NoData'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
+import { getProjectsList } from '@/api/modules/projects'
 
 export default {
   name: 'ProjectsList',
@@ -63,7 +62,6 @@ export default {
     CreateProject,
     NoData,
   },
-  mixins: [listUrlParamHandle],
   data() {
     return {
       total: null,
@@ -84,9 +82,17 @@ export default {
       // url no params get instance list
       this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
     },
+    searchParams: {
+      handler() {
+        this.getProjectsList()
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.getProjectsList()
   },
   methods: {
-    ...mapActions('projects', ['getProjectsList']),
     /**
      * Inquire
      */
@@ -106,7 +112,7 @@ export default {
     },
     _onUpdate() {
       this.createProjectDialog = false
-      this._debounceGET()
+      this.getProjectsList()
     },
     _close() {
       this.createProjectDialog = false
@@ -127,6 +133,23 @@ export default {
         .catch(() => {
           this.isLoading = false
         })
+    },
+    async getProjectsList() {
+      this.isLoading = true
+      try {
+        const res = await getProjectsList(this.searchParams)
+        if (this.searchParams.pageNo > 1 && res.totalList.length === 0) {
+          this.searchParams.pageNo = this.searchParams.pageNo - 1
+        } else {
+          this.projectsList = []
+          this.projectsList = res.totalList
+          this.total = res.total
+          this.isLoading = false
+        }
+      } catch (e) {
+        console.log(e)
+      }
+      this.isLoading = false
     },
   },
 }

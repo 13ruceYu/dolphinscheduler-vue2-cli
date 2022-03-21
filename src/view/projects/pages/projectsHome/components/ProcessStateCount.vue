@@ -75,7 +75,7 @@ export default {
   methods: {
     async getProcessStateCount() {
       try {
-        const res = await getProcessStateCount()
+        const res = await getProcessStateCount(this.searchParams)
         return res.taskCountDtos
       } catch (e) {
         console.log(e)
@@ -106,5 +106,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" rel="stylesheet/scss"></style>
