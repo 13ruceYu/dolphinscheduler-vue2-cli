@@ -80,7 +80,7 @@ import Spin from '@/components/spin/Spin'
 import NoData from '@/components/noData/NoData'
 import Conditions from '@/components/conditions/Conditions'
 import { getResourceListPage, getResourceId } from '@/api/modules/resource'
-import FileChildUploadDialog from './FileChildUploadDialog.vue'
+import FileChildUploadDialog from '@/components/fileChildUploadDialog/FileChildUploadDialog.vue'
 
 export default {
   name: 'resource-list-index-FILE',

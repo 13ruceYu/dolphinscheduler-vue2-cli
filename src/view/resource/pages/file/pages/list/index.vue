@@ -52,7 +52,7 @@ import NoData from '@/components/noData/NoData'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
 import { getResourceListPage } from '@/api/modules/resource'
-import FileUploadDialog from './FileUploadDialog.vue'
+import FileUploadDialog from '@/components/fileUploadDialog/FileUploadDialog.vue'
 
 export default {
   name: 'resource-list-index-FILE',

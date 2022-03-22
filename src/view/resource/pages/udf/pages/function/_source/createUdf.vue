@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <m-popup
     style="width: 800px"
@@ -154,15 +147,15 @@ export default {
       this.$refs.popup.spinnerLoading = true
       if (this._validation()) {
         this._verifyUdfFuncName()
-          .then((res) => {
+          .then(() => {
             this._createUdfFunc().then()
           })
-          .then((res) => {
+          .then(() => {
             setTimeout(() => {
               this.$refs.popup.spinnerLoading = false
             }, 800)
           })
-          .catch((e) => {
+          .catch(() => {
             this.$refs.popup.spinnerLoading = false
           })
       } else {
@@ -216,7 +209,7 @@ export default {
      * get udf resources
      */
     _getUdfList() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.store.dispatch('resource/getResourcesList', { type: 'UDF' }).then((res) => {
           let item = res.data
           this.filterEmptyDirectory(item)
@@ -311,7 +304,7 @@ export default {
         } else {
           this.store
             .dispatch('resource/verifyUdfFuncName', { name: this.funcName })
-            .then((res) => {
+            .then(() => {
               resolve()
             })
             .catch((e) => {
@@ -325,9 +318,8 @@ export default {
       this.$emit('close')
     },
   },
-  watch: {},
   created() {
-    this._getUdfList().then((res) => {
+    this._getUdfList().then(() => {
       // edit
       if (this.item) {
         this.type = this.item.type
@@ -342,7 +334,6 @@ export default {
       }
     })
   },
-  mounted() {},
   components: { mPopup, ListBoxF, mUdfUpdate, Treeselect },
 }
 </script>

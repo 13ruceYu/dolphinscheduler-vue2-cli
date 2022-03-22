@@ -63,3 +63,43 @@ export function getResourceId(params) {
     params,
   })
 }
+
+export function deleteUdf(params) {
+  return axios({
+    method: 'get',
+    url: '/resources/udf-func/delete',
+    params,
+  })
+}
+
+export function getResourcesList(params) {
+  return axios({
+    method: 'get',
+    url: '/resources/list',
+    params,
+  })
+}
+
+export function createUdfFunc(data) {
+  return axios({
+    method: 'post',
+    url: '/resources/udf-func/create',
+    data,
+  })
+}
+
+export function updateUdfFunc(data) {
+  return axios({
+    method: 'post',
+    url: '/resources/udf-func/update',
+    data,
+  })
+}
+
+export function verifyUdfFuncName(params) {
+  return axios({
+    method: 'get',
+    url: 'resources/udf-func/verify-name',
+    params,
+  })
+}

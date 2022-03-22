@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <div class="list-model">
     <div class="table-box">
@@ -62,58 +55,30 @@ governing permissions and * limitations under the License. */
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :visible.sync="createUdfDialog" width="auto">
-      <m-create-udf :item="item" @onUpdate="onUpdate" @close="close"></m-create-udf>
-    </el-dialog>
+    <CreateUdfDialog :item="item" :visible.sync="createUdfDialogVisible" @onSuccess="onUpdate"></CreateUdfDialog>
   </div>
 </template>
+
 <script>
-import { mapActions } from 'vuex'
-import mCreateUdf from './createUdf'
+import { deleteUdf } from '@/api/modules/resource'
+import CreateUdfDialog from './CreateUdfDialog.vue'
 
 export default {
   name: 'udf-manage-list',
+  components: { CreateUdfDialog },
+  props: {
+    udfFuncList: Array,
+    pageNo: Number,
+    pageSize: Number,
+  },
   data() {
     return {
       list: [],
       spinnerLoading: false,
       createUdfDialog: false,
       item: {},
+      createUdfDialogVisible: false,
     }
-  },
-  props: {
-    udfFuncList: Array,
-    pageNo: Number,
-    pageSize: Number,
-  },
-  methods: {
-    ...mapActions('resource', ['deleteUdf']),
-    _delete(item, i) {
-      this.spinnerLoading = true
-      this.deleteUdf({
-        id: item.id,
-      })
-        .then((res) => {
-          this.$emit('on-update')
-          this.$message.success(res.msg)
-          this.spinnerLoading = false
-        })
-        .catch((e) => {
-          this.$message.error(e.msg || '')
-          this.spinnerLoading = false
-        })
-    },
-    _edit(item) {
-      this.item = item
-      this.createUdfDialog = true
-    },
-    onUpdate() {
-      this.$emit('on-update')
-      this.createUdfDialog = false
-    },
-    close() {
-      this.createUdfDialog = false
-    },
   },
   watch: {
     udfFuncList(a) {
@@ -123,10 +88,34 @@ export default {
       })
     },
   },
-  created() {},
   mounted() {
     this.list = this.udfFuncList
   },
-  components: { mCreateUdf },
+  methods: {
+    async _delete(item) {
+      this.spinnerLoading = true
+
+      try {
+        await deleteUdf({ id: item.id })
+        this.$emit('on-update')
+        this.$message.success(this.$t('success'))
+      } catch (e) {
+        this.$message.error(e || '')
+      }
+
+      this.spinnerLoading = false
+    },
+    _edit(item) {
+      this.item = item
+      this.createUdfDialogVisible = true
+    },
+    onUpdate() {
+      this.$emit('on-update')
+      this.createUdfDialog = false
+    },
+    close() {
+      this.createUdfDialog = false
+    },
+  },
 }
 </script>

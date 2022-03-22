@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <ListConstruction :title="$t('UDF Function')">
     <template slot="conditions">
@@ -13,9 +6,6 @@ governing permissions and * limitations under the License. */
           <el-button-group>
             <el-button size="mini" @click="_create">{{ $t('Create UDF Function') }}</el-button>
           </el-button-group>
-          <el-dialog :visible.sync="createUdfDialog" width="auto">
-            <m-create-udf @onUpdate="onUpdate" @close="close"></m-create-udf>
-          </el-dialog>
         </template>
       </Conditions>
     </template>
@@ -42,26 +32,35 @@ governing permissions and * limitations under the License. */
           </el-pagination>
         </div>
       </template>
-      <template v-if="!udfFuncList.length && total <= 0">
-        <NoData></NoData>
-      </template>
+      <NoData v-else></NoData>
       <Spin :is-spin="isLoading" :is-left="isLeft"></Spin>
+      <CreateUdfDialog :visible.sync="createUdfDialogVisible" @onSuccess="onUpdate"></CreateUdfDialog>
     </template>
   </ListConstruction>
 </template>
+
 <script>
 import _ from 'lodash'
 import { mapActions } from 'vuex'
 import mList from './_source/list'
-import mCreateUdf from './_source/createUdf'
 import Spin from '@/components/spin/Spin'
 import NoData from '@/components/noData/NoData'
 import listUrlParamHandle from '@/module/mixin/listUrlParamHandle'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
+import CreateUdfDialog from './_source/CreateUdfDialog.vue'
 
 export default {
   name: 'udf-function-index',
+  mixins: [listUrlParamHandle],
+  components: {
+    ListConstruction,
+    Conditions,
+    mList,
+    Spin,
+    NoData,
+    CreateUdfDialog,
+  },
   data() {
     return {
       total: null,
@@ -75,10 +74,19 @@ export default {
       },
       isLeft: true,
       createUdfDialog: false,
+      createUdfDialogVisible: false,
     }
   },
-  mixins: [listUrlParamHandle],
-  props: {},
+  watch: {
+    // router
+    $route(a) {
+      // url no params get instance list
+      this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
+    },
+  },
+  beforeDestroy() {
+    sessionStorage.setItem('isLeft', 1)
+  },
   methods: {
     ...mapActions('resource', ['getUdfFuncListP']),
     _onConditions(o) {
@@ -92,7 +100,7 @@ export default {
       this.searchParams.pageSize = val
     },
     _create() {
-      this.createUdfDialog = true
+      this.createUdfDialogVisible = true
     },
     onUpdate() {
       this._updateList()
@@ -124,30 +132,10 @@ export default {
             this.isLoading = false
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.isLoading = false
         })
     },
-  },
-  watch: {
-    // router
-    $route(a) {
-      // url no params get instance list
-      this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
-    },
-  },
-  created() {},
-  mounted() {},
-  beforeDestroy() {
-    sessionStorage.setItem('isLeft', 1)
-  },
-  components: {
-    ListConstruction,
-    Conditions,
-    mList,
-    Spin,
-    mCreateUdf,
-    NoData,
   },
 }
 </script>

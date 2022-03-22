@@ -1,10 +1,3 @@
-/* * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the NOTICE
-file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses this file
-to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance with *
-the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required
-by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific language
-governing permissions and * limitations under the License. */
 <template>
   <div class="update-udf-model">
     <div class="update-udf-box">
@@ -16,16 +9,21 @@ governing permissions and * limitations under the License. */
               size="small"
               v-model="udfName"
               :disabled="progress !== 0"
-              style="width: 535px"
+              style="width: 400px"
               :placeholder="$t('Please enter name')"
             >
             </el-input>
-            <div class="p1" style="position: absolute">
+            <el-upload :auto-upload="false" :on-change="fileChange" :before-upload="beforeFileUpload">
+              <el-button slot="trigger" size="small" plain>
+                {{ $t('Upload') }}<i class="el-icon-upload el-icon--right"></i
+              ></el-button>
+            </el-upload>
+            <!-- <div class="p1">
               <input name="file" id="file" type="file" class="file-update" v-if="!progress" />
               <el-button type="dashed" size="small" :disabled="progress !== 0"
                 >{{ $t('Upload') }}<em class="el-icon-upload"></em
               ></el-button>
-            </div>
+            </div> -->
           </div>
         </li>
         <li>
@@ -51,6 +49,7 @@ governing permissions and * limitations under the License. */
 import io from '@/module/io'
 import i18n from '@/module/i18n'
 import store from '@/store'
+import $ from 'jquery'
 
 export default {
   name: 'udf-update',
@@ -66,11 +65,27 @@ export default {
       currentDir: '',
     }
   },
-  props: {},
+  mounted() {
+    $('#file').change(() => {
+      let file = $('#file')[0].files[0]
+      this.file = file
+      this.udfName = file.name
+    })
+  },
   methods: {
-    /**
-     * validation
-     */
+    beforeFileUpload(file) {
+      const isLt1024M = file.size / 1024 / 1024 < 1024
+      if (!isLt1024M) {
+        this.$message.warning(`${this.$t('Upload File Size')}`)
+      }
+      return isLt1024M
+    },
+    fileChange(file, fileList) {
+      const { name, raw } = file
+      fileList.length > 1 && fileList.splice(0, 1)
+      this.file = raw
+      this.udfName = name
+    },
     _validation() {
       if (!this.currentDir) {
         this.$message.warning(`${i18n.$t('Please select UDF resources directory')}`)
@@ -93,7 +108,7 @@ export default {
             fullName: '/' + this.currentDir + '/' + this.udfName,
             type: 'UDF',
           })
-          .then((res) => {
+          .then(() => {
             resolve()
           })
           .catch((e) => {
@@ -147,26 +162,12 @@ export default {
     },
     _ok() {
       if (this._validation()) {
-        this._verifyName().then((res) => {
+        this._verifyName().then(() => {
           this._formDataUpdate()
         })
       }
     },
   },
-  watch: {},
-  created() {},
-  mounted() {
-    $('#file').change(() => {
-      let file = $('#file')[0].files[0]
-      this.file = file
-      this.udfName = file.name
-    })
-  },
-  updated() {},
-  beforeDestroy() {},
-  destroyed() {},
-  computed: {},
-  components: {},
 }
 </script>
 
@@ -183,23 +184,6 @@ export default {
         .v-input {
           textarea {
             min-height: 60px !important;
-          }
-        }
-        .update-pbx {
-          position: relative;
-          .p1 {
-            right: 0;
-            top: 0;
-            width: 82px;
-            height: 28px;
-            overflow: hidden;
-            .file-update {
-              position: absolute;
-              left: 0;
-              top: 0;
-              opacity: 0;
-              cursor: pointer;
-            }
           }
         }
       }
