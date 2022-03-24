@@ -34,20 +34,13 @@
         </el-input>
       </el-form-item>
       <el-form-item :label="$t('UDF Resources')" required>
-        <treeselect
-          style="width: 535px; float: left"
+        <el-cascader
           v-model="resourceId"
-          maxHeight="200"
-          :disable-branch-nodes="true"
+          size="small"
+          :props="{ value: 'id', label: 'name' }"
           :options="udfResourceList"
-          :disabled="isUpdate"
-          :normalizer="normalizer"
           :placeholder="$t('Please select UDF resources directory')"
-        >
-          <div slot="value-label" slot-scope="{ node }">
-            {{ node.raw.fullName }}
-          </div>
-        </treeselect>
+        ></el-cascader>
       </el-form-item>
       <el-form-item :label="$t('Instructions')">
         <el-input type="textarea" v-model="description" size="small" :placeholder="$t('Please enter a instructions')">
@@ -62,14 +55,10 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getResourcesList, createUdfFunc, updateUdfFunc, verifyUdfFuncName } from '@/api/modules/resource'
 
 export default {
   name: 'CreateUdfDialog',
-  components: { Treeselect },
   props: {
     item: Object,
     visible: {
@@ -88,7 +77,6 @@ export default {
       resourceId: null,
       pid: null,
       udfResourceList: [],
-      isUpdate: false,
       upDisabled: false,
       normalizer(node) {
         return {
@@ -146,61 +134,25 @@ export default {
         }
       }
     },
-    _onUpdatePresent() {
-      // disabled submit
-      this.$refs.popup.apDisabled = true
-      // disabled update
-      this.upDisabled = true
-    },
-    // selTree
-    selTree(node) {
-      this.$refs.assignment.receivedValue(node.id, node.fullName)
-    },
     async _getUdfList() {
       try {
         const res = await getResourcesList({ type: 'UDF' })
-        let item = res
-        this.filterEmptyDirectory(item)
-        item = this.filterEmptyDirectory(item)
-        let item1 = _.cloneDeep(res)
-        this.diGuiTree(item)
-
-        this.diGuiTree(this.filterJarFile(item1))
-        item1 = item1.filter((item) => {
-          if (item.dirctory) {
-            return item
-          }
-        })
-        this.udfResourceList = item
-        this.udfResourceDirList = item1
+        const cloneRes = [...res]
+        this.removeEmptyChildren(cloneRes)
+        this.udfResourceList = res
       } catch (e) {
         console.log(e)
       }
     },
-    filterEmptyDirectory(array) {
-      for (const item of array) {
-        if (item.children) {
-          this.filterEmptyDirectory(item.children)
+    removeEmptyChildren(data) {
+      data.forEach((el) => {
+        if (el.children) {
+          if (el.children.length === 0) {
+            delete el.children
+          } else {
+            this.removeEmptyChildren(el.children)
+          }
         }
-      }
-      return array.filter(
-        (n) => (/\.jar$/.test(n.name) && n.children.length === 0) || (!/\.jar$/.test(n.name) && n.children.length > 0)
-      )
-    },
-    filterJarFile(array) {
-      for (const item of array) {
-        if (item.children) {
-          item.children = this.filterJarFile(item.children)
-        }
-      }
-      return array.filter((n) => !/\.jar$/.test(n.name))
-    },
-    diGuiTree(item) {
-      // Recursive convenience tree structure
-      item.forEach((item) => {
-        item.children === '' || item.children === undefined || item.children === null || item.children.length === 0
-          ? delete item.children
-          : this.diGuiTree(item.children)
       })
     },
     _validation() {

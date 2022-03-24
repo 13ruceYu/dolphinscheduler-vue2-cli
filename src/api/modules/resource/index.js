@@ -80,6 +80,14 @@ export function getResourcesList(params) {
   })
 }
 
+export function getUdfFuncListPage(params) {
+  return axios({
+    method: 'get',
+    url: '/resources/udf-func/list-paging',
+    params,
+  })
+}
+
 export function createUdfFunc(data) {
   return axios({
     method: 'post',

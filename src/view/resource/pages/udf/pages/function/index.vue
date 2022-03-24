@@ -41,18 +41,16 @@
 
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex'
 import mList from './_source/list'
 import Spin from '@/components/spin/Spin'
 import NoData from '@/components/noData/NoData'
-import listUrlParamHandle from '@/module/mixin/listUrlParamHandle'
 import Conditions from '@/components/conditions/Conditions'
 import ListConstruction from '@/components/listConstruction/ListConstruction'
 import CreateUdfDialog from './_source/CreateUdfDialog.vue'
+import { getUdfFuncListPage } from '@/api/modules/resource'
 
 export default {
   name: 'udf-function-index',
-  mixins: [listUrlParamHandle],
   components: {
     ListConstruction,
     Conditions,
@@ -78,17 +76,20 @@ export default {
     }
   },
   watch: {
-    // router
-    $route(a) {
-      // url no params get instance list
-      this.searchParams.pageNo = _.isEmpty(a.query) ? 1 : a.query.pageNo
+    searchParams: {
+      deep: true,
+      handler() {
+        this._getList()
+      },
     },
+  },
+  mounted() {
+    this._getList()
   },
   beforeDestroy() {
     sessionStorage.setItem('isLeft', 1)
   },
   methods: {
-    ...mapActions('resource', ['getUdfFuncListP']),
     _onConditions(o) {
       this.searchParams = _.assign(this.searchParams, o)
       this.searchParams.pageNo = 1
@@ -110,31 +111,25 @@ export default {
     close() {
       this.createUdfDialog = false
     },
-
     _updateList() {
-      this._debounceGET()
+      this._getList()
     },
-    _getList(flag) {
-      if (sessionStorage.getItem('isLeft') === 0) {
-        this.isLeft = false
-      } else {
-        this.isLeft = true
-      }
+    async _getList(flag) {
+      sessionStorage.getItem('isLeft') === 0 ? (this.isLeft = false) : (this.isLeft = true)
       this.isLoading = !flag
-      this.getUdfFuncListP(this.searchParams)
-        .then((res) => {
-          if (this.searchParams.pageNo > 1 && res.totalList.length === 0) {
-            this.searchParams.pageNo = this.searchParams.pageNo - 1
-          } else {
-            this.udfFuncList = []
-            this.udfFuncList = res.totalList
-            this.total = res.total
-            this.isLoading = false
-          }
-        })
-        .catch(() => {
-          this.isLoading = false
-        })
+      try {
+        const res = await getUdfFuncListPage(this.searchParams)
+        if (this.searchParams.pageNo > 1 && res.totalList.length === 0) {
+          this.searchParams.pageNo = this.searchParams.pageNo - 1
+        } else {
+          this.udfFuncList = []
+          this.udfFuncList = res.totalList
+          this.total = res.total
+        }
+      } catch (e) {
+        console.log(e)
+      }
+      this.isLoading = false
     },
   },
 }
